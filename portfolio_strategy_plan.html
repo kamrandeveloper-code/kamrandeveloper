@@ -1,0 +1,505 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, sans-serif); }
+
+  .page { padding: 2rem 0; max-width: 680px; }
+
+  .hero-banner {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2rem;
+  }
+  .hero-banner h1 {
+    font-size: 20px; font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+  }
+  .hero-banner p {
+    font-size: 14px; color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+
+  .card-sub {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 0.5px solid var(--color-border-secondary);
+    color: var(--color-text-secondary);
+  }
+  .tag.blue { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; }
+  .tag.green { background: var(--color-background-success); color: var(--color-text-success); border-color: transparent; }
+  .tag.amber { background: var(--color-background-warning); color: var(--color-text-warning); border-color: transparent; }
+  .tag.red { background: var(--color-background-danger); color: var(--color-text-danger); border-color: transparent; }
+
+  .section-order {
+    display: grid;
+    gap: 0;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .order-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-primary);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .order-row:last-child { border-bottom: none; }
+  .order-row:hover { background: var(--color-background-secondary); }
+  .order-num {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    padding-top: 1px;
+  }
+  .order-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+  .order-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .order-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .badge-must { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .badge-high { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-good { background: var(--color-background-success); color: var(--color-text-success); }
+
+  .copy-block {
+    background: var(--color-background-secondary);
+    border-left: 3px solid var(--color-border-info);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .copy-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-info);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+  .copy-text {
+    font-size: 14px;
+    color: var(--color-text-primary);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .audience-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.25rem;
+  }
+  .aud-title {
+    font-size: 13px; font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .aud-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .aud-list { list-style: none; }
+  .aud-list li {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    padding: 3px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .aud-list li:last-child { border-bottom: none; }
+
+  .ai-section {
+    border: 2px solid var(--color-border-info);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .ai-header {
+    background: var(--color-background-info);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ai-header-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-info);
+  }
+  .ai-body { padding: 1rem 1.25rem; }
+  .ai-item {
+    display: flex; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    align-items: start;
+  }
+  .ai-item:last-child { border-bottom: none; }
+  .ai-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .ai-item-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+  .ai-item-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    margin: 2rem 0;
+  }
+
+  .tip-row {
+    display: flex; gap: 10px; align-items: start;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .tip-row:last-child { border-bottom: none; }
+  .tip-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+  .tip-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+  .tip-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.55; }
+  .tips-wrapper {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 0.75rem 1.25rem;
+  }
+</style>
+
+<div class="page">
+  <h2 class="sr-only">Portfolio Strategy Blueprint — .NET Developer & AI Solutions</h2>
+
+  <div class="hero-banner">
+    <h1>Portfolio strategy blueprint</h1>
+    <p>A complete content, structure, and messaging strategy for a client-winning, business-focused developer portfolio — built for .NET & AI solutions.</p>
+  </div>
+
+  <!-- POSITIONING -->
+  <div class="section-label">Your core positioning</div>
+  <div class="copy-block">
+    <div class="copy-label">Your headline positioning (not a tagline — a worldview)</div>
+    <div class="copy-text">"I don't just write code. I build software that solves your business problems, automates your workflows, and uses AI to give your team an unfair advantage."</div>
+  </div>
+  <div class="copy-block">
+    <div class="copy-label">One-line identity (use on hero + meta description)</div>
+    <div class="copy-text">"Custom software & AI solutions for businesses that want to work smarter."</div>
+  </div>
+  <div class="copy-block">
+    <div class="copy-label">For non-technical visitors (plain language)</div>
+    <div class="copy-text">"Got a business problem that feels like it should have a software solution? I build it — from scratch, tailored to you, without the agency price tag."</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION ORDER -->
+  <div class="section-label">Section order & strategy</div>
+  <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:1rem; line-height:1.6;">Scroll flow is your sales funnel. Every section earns the next scroll. Click any row to explore it.</p>
+
+  <div class="section-order">
+    <div class="order-row" onclick="sendPrompt('Give me detailed copywriting ideas for the Hero section of my .NET developer portfolio')">
+      <div class="order-num">01</div>
+      <div>
+        <div class="order-title">Hero — above the fold</div>
+        <div class="order-desc">Bold headline. Plain-language value prop. Two CTAs: "See my work" + "Let's talk". Professional photo or animated code visual. Trust indicators (e.g. 1 yr experience, CS graduate, AI-integrated).</div>
+      </div>
+      <div class="order-badge badge-must">Must</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('Give me detailed ideas for a Services or What I Build section on my .NET developer portfolio — targeting business clients')">
+      <div class="order-num">02</div>
+      <div>
+        <div class="order-title">What I build — services</div>
+        <div class="order-desc">NOT a tech stack list. Frame as outcomes: "Business management systems", "AI-powered automation", "Custom web apps", "Workflow tools". Use icon cards, not bullet lists.</div>
+      </div>
+      <div class="order-badge badge-must">Must</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('How should I write a How I Work process section for my developer portfolio to build trust with non-technical business clients?')">
+      <div class="order-num">03</div>
+      <div>
+        <div class="order-title">How I work — process</div>
+        <div class="order-desc">3–4 step process: Understand → Design → Build → Deliver. Reassures non-technical clients. Shows you think in business terms first, tech second.</div>
+      </div>
+      <div class="order-badge badge-high">High</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('Give me detailed ideas for the Projects section of my developer portfolio — how to write case studies that appeal to business clients AND recruiters')">
+      <div class="order-num">04</div>
+      <div>
+        <div class="order-title">Projects — case studies</div>
+        <div class="order-desc">3–5 projects max. Each one: problem → solution → business outcome. Show AI-integrated projects prominently. Dual-layer: business summary visible, tech stack tucked inside card.</div>
+      </div>
+      <div class="order-badge badge-must">Must</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('How should I present my AI integration skills and services on my developer portfolio?')">
+      <div class="order-num">05</div>
+      <div>
+        <div class="order-title">AI & automation — spotlight</div>
+        <div class="order-desc">Dedicated section. Business language: "I can add AI to your existing systems", "Automate repetitive tasks", "Build intelligent features". Not just "I know OpenAI API".</div>
+      </div>
+      <div class="order-badge badge-must">Must</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('How should I present my technical skills section on a portfolio that also targets non-technical business owners — not just recruiters?')">
+      <div class="order-num">06</div>
+      <div>
+        <div class="order-title">Skills — technical proof</div>
+        <div class="order-desc">For recruiters & technical visitors. Clean icon grid: C#, .NET Core, Next.js, JS, HTML/CSS, SQL. Group by layer: Backend / Frontend / AI & Tools. Keep it visual, not a wall of text.</div>
+      </div>
+      <div class="order-badge badge-high">High</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('How should I write an About Me section that builds trust with both business clients and recruiters?')">
+      <div class="order-num">07</div>
+      <div>
+        <div class="order-title">About me — story & trust</div>
+        <div class="order-desc">Lead with mindset, not CV. "I'm a CS graduate who builds software that actually helps businesses run better." Photo. Short, warm, human. Mention curiosity for AI. End with a CTA.</div>
+      </div>
+      <div class="order-badge badge-high">High</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('Give me ideas for a blog or articles section on my developer portfolio that helps attract business clients')">
+      <div class="order-num">08</div>
+      <div>
+        <div class="order-title">Blog / insights — authority</div>
+        <div class="order-desc">3 articles minimum to launch. Mix: one business-facing ("How AI can save your team 10 hours/week"), one technical (for recruiters), one project walkthrough. Positions you as expert.</div>
+      </div>
+      <div class="order-badge badge-good">Nice</div>
+    </div>
+    <div class="order-row" onclick="sendPrompt('What should I put in the Contact section of my developer portfolio to maximise conversions from potential clients?')">
+      <div class="order-num">09</div>
+      <div>
+        <div class="order-title">Contact — conversion point</div>
+        <div class="order-desc">Simple form: Name, email, project type dropdown, brief description. Friendly headline: "Have a project in mind? Let's talk." Add response time: "I reply within 24 hours." Links: LinkedIn, GitHub.</div>
+      </div>
+      <div class="order-badge badge-must">Must</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- AUDIENCE STRATEGY -->
+  <div class="section-label">Audience-by-audience messaging</div>
+  <div class="two-col">
+    <div class="audience-card">
+      <div class="aud-title"><div class="aud-dot" style="background:#2563eb"></div>Business owners</div>
+      <ul class="aud-list">
+        <li>Lead with problems, not tech</li>
+        <li>Use plain, outcome language</li>
+        <li>"Save time / reduce errors"</li>
+        <li>Show ROI in project cards</li>
+        <li>Make contact frictionless</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <div class="aud-title"><div class="aud-dot" style="background:#16a34a"></div>Potential clients</div>
+      <ul class="aud-list">
+        <li>Process section builds trust</li>
+        <li>Case studies show you deliver</li>
+        <li>Clear service offerings</li>
+        <li>"Projects start from…" pricing</li>
+        <li>Testimonials when available</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <div class="aud-title"><div class="aud-dot" style="background:#9333ea"></div>Recruiters</div>
+      <ul class="aud-list">
+        <li>Tech stack section (icon grid)</li>
+        <li>Projects with GitHub links</li>
+        <li>Education & experience clear</li>
+        <li>Mention .NET Core MVC</li>
+        <li>Clean, readable layout</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <div class="aud-title"><div class="aud-dot" style="background:#ea580c"></div>Technical visitors</div>
+      <ul class="aud-list">
+        <li>Show code quality in projects</li>
+        <li>Architecture decisions visible</li>
+        <li>Blog posts on technical topics</li>
+        <li>GitHub profile linked</li>
+        <li>Stack choices explained briefly</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- AI SECTION -->
+  <div class="section-label">AI & automation — how to present it</div>
+  <div class="ai-section">
+    <div class="ai-header">
+      <i class="ti ti-cpu" aria-hidden="true" style="font-size:16px; color: var(--color-text-info)"></i>
+      <div class="ai-header-text">Dedicated "AI-powered solutions" section — headline ideas & what to show</div>
+    </div>
+    <div class="ai-body">
+      <div class="ai-item">
+        <i class="ti ti-wand" class="ai-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+        <div>
+          <div class="ai-item-title">Section headline (business-facing)</div>
+          <div class="ai-item-desc">"I build AI into your business — not someday, right now." Show 3–4 practical AI use cases: document analysis, chatbots, auto-reporting, data extraction. Use icons + one-line descriptions.</div>
+        </div>
+      </div>
+      <div class="ai-item">
+        <i class="ti ti-robot" class="ai-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+        <div>
+          <div class="ai-item-title">What to show as AI capabilities</div>
+          <div class="ai-item-desc">AI-powered dashboards, intelligent search, document summarisation, chatbot integration, workflow automation with LLMs, smart form processing. Frame each as: "Problem it solves → How AI helps."</div>
+        </div>
+      </div>
+      <div class="ai-item">
+        <i class="ti ti-bulb" class="ai-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+        <div>
+          <div class="ai-item-title">If you have no AI project yet</div>
+          <div class="ai-item-desc">Build one small demo app: an AI-powered invoice reader, a customer FAQ chatbot, or an admin dashboard with AI summaries. Even one deployed demo earns the right to claim this capability.</div>
+        </div>
+      </div>
+      <div class="ai-item">
+        <i class="ti ti-code" class="ai-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+        <div>
+          <div class="ai-item-title">Technologies to mention (for recruiters)</div>
+          <div class="ai-item-desc">OpenAI / Azure OpenAI API, LangChain or Semantic Kernel (for .NET), Prompt engineering, RAG (Retrieval-Augmented Generation), REST AI APIs in Next.js and C#.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- HERO COPYWRITING -->
+  <div class="section-label">Hero section — copywriting options</div>
+  <div class="copy-block">
+    <div class="copy-label">Option A — bold & direct (recommended)</div>
+    <div class="copy-text">"I build custom software and AI-powered tools for businesses that are tired of doing things manually. From .NET web apps to intelligent automation — I turn your requirements into working software."</div>
+  </div>
+  <div class="copy-block">
+    <div class="copy-label">Option B — problem-first</div>
+    <div class="copy-text">"Your business has problems that software should already be solving. I build the custom tools that fix them — fast, reliable, and built around how you actually work."</div>
+  </div>
+  <div class="copy-block">
+    <div class="copy-label">Option C — identity-led</div>
+    <div class="copy-text">"I'm a .NET developer who builds software businesses actually use. Custom web apps, automated workflows, and AI-powered features — all designed around your goals, not just your tech stack."</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- LAYOUT & FEEL -->
+  <div class="section-label">Layout, feel & design direction</div>
+  <div class="tips-wrapper">
+    <div class="tip-row">
+      <i class="ti ti-layout" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">Layout: single-page scroll with anchor navigation</div>
+        <div class="tip-desc">Sticky header with section links. All sections on one page — reduces friction. Smooth scroll. No full-page reloads. Works for all visitor types.</div>
+      </div>
+    </div>
+    <div class="tip-row">
+      <i class="ti ti-palette" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">Visual tone: clean dark or deep navy + accent colour</div>
+        <div class="tip-desc">Dark backgrounds signal premium and technical confidence. Pair with one accent (electric blue, teal, or violet). Avoid red/yellow — feels startup-casual, not business-serious.</div>
+      </div>
+    </div>
+    <div class="tip-row">
+      <i class="ti ti-eye" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">Above the fold: identity + value + 2 actions</div>
+        <div class="tip-desc">Name, role (not just "Developer" — try "Custom Software & AI Solutions"), one-liner value prop, "View my work" (→ projects) and "Let's talk" (→ contact).</div>
+      </div>
+    </div>
+    <div class="tip-row">
+      <i class="ti ti-brand-github" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">Projects: dual-layer cards</div>
+        <div class="tip-desc">Front of card: business problem + business outcome (for clients). Expand/back: tech stack + architecture decisions (for recruiters). One card, two audiences.</div>
+      </div>
+    </div>
+    <div class="tip-row">
+      <i class="ti ti-world" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">Micro-interactions: subtle animations only</div>
+        <div class="tip-desc">Card hover lifts, section fade-in on scroll, skill icons with hover labels. No autoplay video, no scroll-hijacking. Speed matters — under 2s load on mobile is non-negotiable.</div>
+      </div>
+    </div>
+    <div class="tip-row">
+      <i class="ti ti-star" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">Trust builders: scatter throughout</div>
+        <div class="tip-desc">CS graduate badge, "1+ year .NET experience", GitHub activity graph, live project links, a short testimonial block (even from university or internship), "Available for freelance / hire" status indicator.</div>
+      </div>
+    </div>
+    <div class="tip-row">
+      <i class="ti ti-list" class="tip-icon" aria-hidden="true" style="font-size:16px; color: var(--color-text-secondary)"></i>
+      <div>
+        <div class="tip-title">What to avoid</div>
+        <div class="tip-desc">Don't open with "Hi, I'm [name] and I'm a passionate developer." Don't list 30 skills as plain text. Don't use stock developer photos. Don't hide contact behind multiple clicks.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- DIFFERENTIATOR -->
+  <div class="section-label">How to stand out from traditional portfolios</div>
+  <div class="card">
+    <div class="card-title">The "traditional" portfolio trap</div>
+    <div class="card-sub">Most developer portfolios are: hero ("I'm a passionate dev"), skills list, 3 GitHub projects, contact form. They speak only to recruiters and communicate nothing to business owners or clients. Yours will be different because it leads with problems you solve, not technologies you know.</div>
+    <div class="tag-row">
+      <span class="tag blue">Problem-led</span>
+      <span class="tag green">Business outcomes</span>
+      <span class="tag amber">AI-forward</span>
+      <span class="tag red">Client CTA</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Your unique angle: .NET + AI + business thinking</div>
+    <div class="card-sub">Very few developers in the market position themselves as "I build .NET systems AND I integrate AI into them for business value." That combination — reliable enterprise-grade backend + modern AI capabilities — is a compelling and specific offer that stands out from generic "full-stack developers."</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Blog = long-term authority engine</div>
+    <div class="card-sub">Writing 2–3 posts targeting business owners ("When does your business actually need custom software?", "5 things you can automate with AI this month") builds SEO and positions you as a trusted advisor rather than just a coder for hire. This is what separates premium freelancers from the crowd.</div>
+  </div>
+</div>

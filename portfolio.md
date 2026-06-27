@@ -1,0 +1,8 @@
+Here's your complete portfolio strategy. Every section is clickable — tap any row to dive deeper into that specific section's content ideas.
+A few things worth highlighting from research on what actually wins clients:
+The strongest positioning statements are specific and outcome-focused — something like "I help businesses automate their operations through custom .NET and AI-powered software" beats "I'm a passionate developer" every time. Specificity is what makes clients take you seriously and reach out faster. Damongo
+On your projects, case studies are your most powerful trust-builder — a quick breakdown of the project, your approach, and what changed after your input. Add visuals or a one-line outcome statement if possible. Case studies bring context to your skills, and context builds trust. Elink
+Your portfolio's job is not to look cool — it's to land work. If clients can see your best work in seconds, understand what you offer, and contact you easily, it succeeds. Remove anything that doesn't serve that purpose. Medium
+On AI specifically — AI-powered features like a chatbot for initial client screening or intelligent search are among the forward-looking trends that set developer portfolios apart in 2026. Building even one small AI-integrated demo project will let you claim this capability authentically. Sainulabid
+The biggest strategic move you can make: position yourself as the person who understands the business problem first and reaches for the code second. That's rare, and it's exactly what business owners are looking for when they can't find it at an agency.
+Want me to go deeper on any specific section — like writing full copy for the hero, or planning out your project case studies?
