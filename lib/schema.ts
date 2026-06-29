@@ -1,3 +1,5 @@
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kamrandev.com";
+
 export function personSchema() {
   return {
     "@context": "https://schema.org",
@@ -6,9 +8,9 @@ export function personSchema() {
     jobTitle: "Custom Software Developer",
     description:
       "Full Stack Software Developer specializing in custom business software, management systems, API integrations and modern web applications.",
-    url: "https://kamrandev.com",
+    url: SITE_URL,
     email: "nkamran045@email.com",
-    image: "https://kamrandev.com/profile.jpg",
+    image: `${SITE_URL}/profile.jpg`,
     address: {
       "@type": "PostalAddress",
       addressCountry: "PK",
@@ -35,7 +37,10 @@ export function personSchema() {
       occupationLocation: { "@type": "Country", name: "Pakistan" },
       skills: "ASP.NET Core, C#, SQL Server, PostgreSQL, React, Next.js, TypeScript",
     },
-    sameAs: ["https://github.com", "https://linkedin.com"],
+    sameAs: [
+      process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com",
+      process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "https://linkedin.com",
+    ],
   };
 }
 
@@ -44,7 +49,7 @@ export function websiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Kamran — Custom Software Developer",
-    url: "https://kamrandev.com",
+    url: SITE_URL,
     description:
       "Custom software development services — management systems, business software, API integrations, and web applications.",
   };

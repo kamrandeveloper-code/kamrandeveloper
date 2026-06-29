@@ -4,17 +4,20 @@ import { developer } from "@/data/developer";
 import { skillGroups } from "@/data/skills";
 import { experiences } from "@/data/experience";
 import { personSchema } from "@/lib/schema";
+import { baseMetadata, BASE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = baseMetadata({
   title: "About Kamran — Custom Software Developer",
   description:
     "Kamran is a Full Stack Software Developer based in Pakistan specializing in custom business software, management systems, API integrations, and e-commerce platforms for healthcare, education, and retail industries.",
+  alternates: { canonical: `${BASE_URL}/about` },
   openGraph: {
     title: "About Kamran — Custom Software Developer",
     description:
       "Custom software developer for businesses. Specializing in management systems, healthcare software, API integrations, and e-commerce platforms.",
+    url: `${BASE_URL}/about`,
   },
-};
+});
 
 const serviceAreas = [
   {
@@ -231,6 +234,114 @@ export default function AboutPage() {
               </div>
             </div>
           )}
+
+          {/* FAQ */}
+          <div className="mb-12">
+            <p className="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-3">FAQ</p>
+            <h2 className="font-display font-bold text-2xl text-text mb-8">Common questions</h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+              {/* About Me */}
+              <div>
+                <h3 className="font-display font-semibold text-text text-base mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
+                  About me
+                </h3>
+                <div className="space-y-2">
+                  {[
+                    {
+                      q: "Where are you based?",
+                      a: "I'm based in Pakistan and work remotely with clients worldwide. Time-zone differences have never been a problem — I'm flexible with communication hours.",
+                    },
+                    {
+                      q: "Are you a freelancer or an agency?",
+                      a: "I'm a solo freelance developer. You work directly with me from the first call to final delivery — no account managers, no handoffs to junior developers.",
+                    },
+                    {
+                      q: "Do you work with international clients?",
+                      a: "Yes. I communicate in English and have experience working with clients across different countries. All project communication, proposals, and documentation are in English.",
+                    },
+                    {
+                      q: "What industries do you know well?",
+                      a: "Healthcare, dental, pharmacy, education, retail, and e-commerce. These are sectors where off-the-shelf tools consistently fall short and custom software makes a real operational difference.",
+                    },
+                    {
+                      q: "Are you available right now?",
+                      a: "Check the availability badge at the top of this page. When I'm available I take on new projects — when I'm fully booked I'm honest about it so you can plan accordingly.",
+                    },
+                  ].map(({ q, a }) => (
+                    <details key={q} className="group bg-surface border border-border rounded-xl overflow-hidden">
+                      <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none hover:bg-bg/50 transition-colors duration-150">
+                        <span className="font-medium text-text text-sm">{q}</span>
+                        <svg
+                          className="w-4 h-4 text-muted shrink-0 transition-transform duration-200 group-open:rotate-45"
+                          fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </summary>
+                      <div className="px-5 pb-4 pt-1 text-muted text-sm leading-relaxed border-t border-border/60">
+                        {a}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </div>
+
+              {/* About My Work */}
+              <div>
+                <h3 className="font-display font-semibold text-text text-base mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
+                  About my work
+                </h3>
+                <div className="space-y-2">
+                  {[
+                    {
+                      q: "What kind of projects do you take on?",
+                      a: "Custom business software — management systems (clinic, school, inventory), POS platforms, e-commerce and multi-vendor marketplaces, API integrations, and web applications built around specific operational workflows.",
+                    },
+                    {
+                      q: "How long does a typical project take?",
+                      a: "A focused management system or small web app takes 4–6 weeks. A multi-module platform with complex workflows runs 2–4 months. I give a clear timeline estimate in every proposal before work begins.",
+                    },
+                    {
+                      q: "What does your process look like?",
+                      a: "Discovery call → written proposal (scope, timeline, price) → design & feedback → development in milestones → testing → handover. You see progress throughout, not just at the end.",
+                    },
+                    {
+                      q: "Do you build mobile apps?",
+                      a: "I build web-based software that works well on all screen sizes including mobile browsers. I don't build native iOS or Android apps — if that's your need I'll tell you upfront.",
+                    },
+                    {
+                      q: "What happens after the project is delivered?",
+                      a: "You receive full source code, deployment, and a handover session. I include a short support window for bug fixes. Ongoing maintenance or feature additions can be arranged as a separate agreement.",
+                    },
+                    {
+                      q: "Can you work with an existing codebase?",
+                      a: "Yes. I can review, extend, or refactor existing projects. I'll be upfront if the existing code has issues that need addressing before new work can be added cleanly.",
+                    },
+                  ].map(({ q, a }) => (
+                    <details key={q} className="group bg-surface border border-border rounded-xl overflow-hidden">
+                      <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none hover:bg-bg/50 transition-colors duration-150">
+                        <span className="font-medium text-text text-sm">{q}</span>
+                        <svg
+                          className="w-4 h-4 text-muted shrink-0 transition-transform duration-200 group-open:rotate-45"
+                          fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </summary>
+                      <div className="px-5 pb-4 pt-1 text-muted text-sm leading-relaxed border-t border-border/60">
+                        {a}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
 
           {/* CTA */}
           <div className="bg-accent/10 border border-accent/20 rounded-2xl p-8">

@@ -1,10 +1,10 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { blogPosts } from "@/data/blog";
 import { projects, type Project } from "@/data/projects";
 import { articleSchema, breadcrumbSchema } from "@/lib/schema";
-import { BASE_URL } from "@/lib/seo";
+import { BASE_URL, baseMetadata } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -21,18 +21,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = blogPosts.find((p) => p.slug === slug);
   if (post) {
-    return {
+    return baseMetadata({
       title: post.title,
       description: post.excerpt,
-      openGraph: { title: post.title, description: post.excerpt },
-    };
+      alternates: { canonical: `${BASE_URL}/blog/${slug}` },
+      openGraph: {
+        title: post.title,
+        description: post.excerpt,
+        url: `${BASE_URL}/blog/${slug}`,
+      },
+    });
   }
   const project = projects.find((p) => p.slug === slug);
   if (project) {
-    return {
+    return baseMetadata({
       title: `${project.title} — Case Study`,
       description: project.description,
-    };
+      alternates: { canonical: `${BASE_URL}/blog/${slug}` },
+      openGraph: {
+        title: `${project.title} — Case Study`,
+        description: project.description,
+        url: `${BASE_URL}/blog/${slug}`,
+      },
+    });
   }
   return {};
 }

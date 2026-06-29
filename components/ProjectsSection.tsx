@@ -2,17 +2,24 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { projects, type Project } from "@/data/projects";
+
+const industryColors: Record<string, string> = {
+  Healthcare: "#10B981",
+  "E-Commerce": "#F59E0B",
+  Retail: "#3B82F6",
+  Education: "#8B5CF6",
+};
 
 export default function ProjectsSection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const drag = useRef({ active: false, startX: 0, scrollLeft: 0 });
 
-  const VISIBLE = 2; // cards shown at once on desktop
+  const VISIBLE = 2;
   const totalStops = projects.length - VISIBLE + 1;
 
-  // card width + gap (gap-6 = 24px)
   const cardWidth = useCallback(() => {
     const el = trackRef.current;
     const card = el?.firstElementChild as HTMLElement | null;
@@ -26,21 +33,18 @@ export default function ProjectsSection() {
     setActiveIndex(Math.max(0, Math.min(index, totalStops - 1)));
   }
 
-  // keep dot in sync when user drags/swipes freely
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
     const onScroll = () => {
       const cw = cardWidth();
       if (!cw) return;
-      const i = Math.round(el.scrollLeft / cw);
-      setActiveIndex(Math.max(0, Math.min(i, totalStops - 1)));
+      setActiveIndex(Math.max(0, Math.min(Math.round(el.scrollLeft / cw), totalStops - 1)));
     };
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
   }, [cardWidth, totalStops]);
 
-  // mouse-drag handlers (touch is handled by native scroll)
   function onPointerDown(e: React.PointerEvent) {
     if (e.pointerType !== "mouse") return;
     const el = trackRef.current!;
@@ -59,29 +63,27 @@ export default function ProjectsSection() {
     drag.current.active = false;
     const el = trackRef.current!;
     el.style.cursor = "grab";
-    // snap to nearest stop
     const cw = cardWidth();
-    if (cw) {
-      const i = Math.round(el.scrollLeft / cw);
-      scrollTo(Math.max(0, Math.min(i, totalStops - 1)));
-    }
+    if (cw) scrollTo(Math.max(0, Math.min(Math.round(el.scrollLeft / cw), totalStops - 1)));
   }
 
   return (
     <section className="py-24 bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="text-center mb-16">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-4">Projects</p>
-          <h2 className="font-display font-bold text-4xl sm:text-5xl text-text mb-4">
-            What I&apos;ve Built
-          </h2>
-          <p className="text-muted text-lg max-w-xl mx-auto">
-            Real business software shipped for real clients.
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-14">
+          <div>
+            <p className="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-3">Portfolio</p>
+            <h2 className="font-display font-bold text-4xl sm:text-5xl text-text leading-tight">
+              What I&apos;ve built
+            </h2>
+          </div>
+          <p className="text-muted text-base max-w-xs leading-relaxed">
+            Real systems for real businesses — each one solving a specific operational problem.
           </p>
         </div>
 
-        {/* Draggable / swipeable track */}
+        {/* Carousel */}
         <div
           ref={trackRef}
           onPointerDown={onPointerDown}
@@ -98,7 +100,7 @@ export default function ProjectsSection() {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="flex-shrink-0 w-[82%] sm:w-[calc(50%-12px)]"
+              className="flex-shrink-0 w-[85%] sm:w-[calc(50%-12px)]"
               style={{ scrollSnapAlign: "start" }}
             >
               <ProjectCard project={project} />
@@ -112,31 +114,29 @@ export default function ProjectsSection() {
             onClick={() => scrollTo(activeIndex - 1)}
             disabled={activeIndex === 0}
             aria-label="Previous"
-            className="flex items-center justify-center w-8 h-8 rounded-full border border-border text-muted hover:border-accent hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
+            className="w-8 h-8 rounded-full border border-border text-muted hover:border-accent hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-
           <div className="flex items-center gap-1.5">
             {Array.from({ length: totalStops }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => scrollTo(i)}
-                aria-label={`Go to slide ${i + 1}`}
+                aria-label={`Slide ${i + 1}`}
                 className={`rounded-full transition-all duration-200 ${
                   i === activeIndex ? "w-5 h-2 bg-accent" : "w-2 h-2 bg-border hover:bg-muted"
                 }`}
               />
             ))}
           </div>
-
           <button
             onClick={() => scrollTo(activeIndex + 1)}
             disabled={activeIndex >= totalStops - 1}
             aria-label="Next"
-            className="flex items-center justify-center w-8 h-8 rounded-full border border-border text-muted hover:border-accent hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150"
+            className="w-8 h-8 rounded-full border border-border text-muted hover:border-accent hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -147,64 +147,56 @@ export default function ProjectsSection() {
         <div className="text-center">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-lg shadow-accent/20"
           >
-            View All Projects
+            View all projects
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
         </div>
-
       </div>
     </section>
   );
 }
 
-// ─── Copy Button ─────────────────────────────────────────────────────────────
-
+/* ── Copy Button ─────────────────────────────── */
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
-
   function handleCopy(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault(); e.stopPropagation();
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
   }
-
   return (
-    <button
-      onClick={handleCopy}
-      title={copied ? "Copied!" : "Copy"}
-      className="flex-shrink-0 p-1 rounded-md text-muted hover:text-accent hover:bg-accent/10 transition-colors duration-150"
-    >
-      {copied ? (
-        <svg className="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-        </svg>
-      ) : (
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-        </svg>
-      )}
+    <button onClick={handleCopy} title={copied ? "Copied!" : "Copy"} className="shrink-0 p-1 rounded text-muted hover:text-accent transition-colors">
+      {copied
+        ? <svg className="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+        : <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+      }
     </button>
   );
 }
 
-// ─── Demo Overlay ─────────────────────────────────────────────────────────────
-
-function DemoOverlay({ demo }: { demo: NonNullable<Project["demo"]> }) {
+/* ── Demo Overlay ────────────────────────────── */
+function DemoOverlay({ demo, onClose }: { demo: NonNullable<Project["demo"]>; onClose: () => void }) {
   return (
-    <div className="absolute inset-0 bg-bg/95 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-2xl flex items-center justify-center p-6 z-20">
+    <div className="absolute inset-0 bg-bg/96 backdrop-blur-[2px] rounded-2xl flex items-center justify-center p-6 z-20">
       <div className="w-full max-w-[264px]">
-        <p className="font-display font-bold text-text text-sm text-center mb-4">
-          Try the Demo
-        </p>
-
+        <div className="flex items-center justify-between mb-4">
+          <p className="font-display font-bold text-text text-sm">Try the Demo</p>
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
+            className="w-6 h-6 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-text transition-colors touch-manipulation"
+            aria-label="Close"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
         <div className="mb-3">
           <label className="block text-[11px] font-semibold text-muted uppercase tracking-wider mb-1">Email</label>
           <div className="flex items-center gap-1.5 bg-surface border border-border rounded-lg px-3 py-2">
@@ -212,7 +204,6 @@ function DemoOverlay({ demo }: { demo: NonNullable<Project["demo"]> }) {
             <CopyButton text={demo.email} />
           </div>
         </div>
-
         <div className="mb-5">
           <label className="block text-[11px] font-semibold text-muted uppercase tracking-wider mb-1">Password</label>
           <div className="flex items-center gap-1.5 bg-surface border border-border rounded-lg px-3 py-2">
@@ -220,18 +211,16 @@ function DemoOverlay({ demo }: { demo: NonNullable<Project["demo"]> }) {
             <CopyButton text={demo.password} />
           </div>
         </div>
-
         <a
           href={demo.url}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-xl transition-colors duration-200"
+          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-xl transition-colors"
         >
-          Start Demo
+          Launch Demo
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
         </a>
       </div>
@@ -239,58 +228,86 @@ function DemoOverlay({ demo }: { demo: NonNullable<Project["demo"]> }) {
   );
 }
 
-// ─── Card ─────────────────────────────────────────────────────────────────────
-
+/* ── Card ────────────────────────────────────── */
 function ProjectCard({ project }: { project: Project }) {
+  const color = industryColors[project.industry] ?? "var(--color-accent)";
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
-    <div className="relative bg-bg border border-border rounded-2xl overflow-hidden hover:border-accent/40 transition-all duration-300 flex flex-col group h-full">
-      <div className="h-52 bg-gradient-to-br from-accent/10 via-surface to-teal/10 flex items-center justify-center relative overflow-hidden flex-shrink-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-teal/5 group-hover:opacity-70 transition-opacity duration-300" />
-        <span className="relative text-xs font-bold tracking-widest uppercase text-accent/50 bg-surface/80 px-3 py-1.5 rounded-full border border-accent/20">
-          {project.industry}
-        </span>
+    <Link
+      href={`/projects/${project.slug}`}
+      className="relative bg-bg border border-border rounded-2xl overflow-hidden hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 transition-all duration-300 flex flex-col group h-full"
+    >
+      {/* Screenshot area */}
+      <div className="relative h-44 flex-shrink-0 overflow-hidden bg-surface">
+        <Image
+          src="/profile.png"
+          alt={project.title}
+          fill
+          className="object-cover object-top"
+          sizes="(max-width: 640px) 85vw, 50vw"
+        />
+        <div className="absolute top-3 left-3 z-10">
+          <span
+            className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full backdrop-blur-sm"
+            style={{ color, backgroundColor: `${color}30`, border: `1px solid ${color}60` }}
+          >
+            {project.industry}
+          </span>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: color }} />
       </div>
 
       <div className="p-6 flex flex-col flex-1">
-        <span className="text-xs font-medium text-teal uppercase tracking-widest mb-2 block">
+        <span className="text-[10px] font-bold tracking-widest uppercase text-muted mb-2 block">
           {project.category}
         </span>
-        <h3 className="font-display font-bold text-text text-xl mb-3 group-hover:text-accent transition-colors duration-200">
+        <h3 className="font-display font-bold text-text text-lg mb-2 group-hover:text-accent transition-colors duration-200 leading-snug">
           {project.title}
         </h3>
-        <p className="text-muted text-sm leading-relaxed mb-4 flex-1">
+        <p className="text-muted text-sm leading-relaxed mb-5 flex-1 line-clamp-2">
           {project.description}
         </p>
-        <TechTags tech={project.tech} />
-        <Link
-          href={`/projects/${project.slug}`}
-          className="inline-flex items-center gap-2 text-accent hover:text-[var(--color-accent-hover)] font-medium text-sm transition-colors duration-200 mt-6"
-        >
-          View Project
-          <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
+
+        {/* Tech tags */}
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          {project.tech.slice(0, 3).map((t) => (
+            <span key={t} className="px-2 py-1 bg-surface border border-border rounded-md text-muted text-[11px] font-medium">
+              {t}
+            </span>
+          ))}
+          {project.tech.length > 3 && (
+            <span className="px-2 py-1 bg-surface border border-border rounded-md text-muted text-[11px] font-medium">
+              +{project.tech.length - 3}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-1.5 text-accent font-semibold text-sm transition-all duration-200 group-hover:gap-2.5">
+            View project
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+          {project.demo && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setDemoOpen(true); }}
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-muted hover:text-accent border border-border hover:border-accent/50 rounded-full px-2.5 py-1 transition-all duration-200 touch-manipulation"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Try Demo
+            </button>
+          )}
+        </div>
       </div>
 
-      {project.demo && <DemoOverlay demo={project.demo} />}
-    </div>
-  );
-}
-
-function TechTags({ tech }: { tech: string[] }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {tech.slice(0, 3).map((t) => (
-        <span key={t} className="px-2.5 py-1 bg-surface border border-border rounded-md text-muted text-xs">
-          {t}
-        </span>
-      ))}
-      {tech.length > 3 && (
-        <span className="px-2.5 py-1 bg-surface border border-border rounded-md text-muted text-xs">
-          +{tech.length - 3} more
-        </span>
+      {project.demo && demoOpen && (
+        <DemoOverlay demo={project.demo} onClose={() => setDemoOpen(false)} />
       )}
-    </div>
+    </Link>
   );
 }

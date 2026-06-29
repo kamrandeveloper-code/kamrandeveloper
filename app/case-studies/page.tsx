@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { projects } from "@/data/projects";
+import { baseMetadata, BASE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = baseMetadata({
   title: "Case Studies",
   description:
     "Detailed case studies of custom software projects — dental clinic management, POS systems, school management, and multi-vendor e-commerce. Business problem, solution, architecture, and results.",
+  alternates: { canonical: `${BASE_URL}/case-studies` },
   openGraph: {
     title: "Case Studies — Kamran Custom Software Developer",
     description:
       "In-depth case studies of custom business software. How real problems were solved with purpose-built software.",
+    url: `${BASE_URL}/case-studies`,
   },
-};
+});
 
 export default function CaseStudiesPage() {
   return (

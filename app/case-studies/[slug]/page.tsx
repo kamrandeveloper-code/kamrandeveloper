@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { projects } from "@/data/projects";
 import { articleSchema, breadcrumbSchema } from "@/lib/schema";
-import { BASE_URL } from "@/lib/seo";
+import { BASE_URL, baseMetadata } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,14 +17,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) return {};
-  return {
+  return baseMetadata({
     title: `${project.title} — Case Study`,
     description: `How ${project.problem} was solved with custom software. ${project.result}`,
+    alternates: { canonical: `${BASE_URL}/case-studies/${slug}` },
     openGraph: {
       title: `${project.title} — Case Study | Kamran`,
       description: project.description,
+      url: `${BASE_URL}/case-studies/${slug}`,
     },
-  };
+  });
 }
 
 export default async function CaseStudyPage({ params }: Props) {

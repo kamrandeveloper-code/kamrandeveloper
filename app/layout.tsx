@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
+import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 import Footer from "@/components/Footer";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
+import ContactFloat from "@/components/ContactFloat";
 import { baseMetadata } from "@/lib/seo";
 import { personSchema, websiteSchema } from "@/lib/schema";
 
@@ -14,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`h-full ${manrope.variable} ${inter.variable}`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-bg text-text antialiased">
         <script
           type="application/ld+json"
@@ -27,7 +40,7 @@ export default function RootLayout({
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />
-        <WhatsAppFloat />
+        <ContactFloat />
       </body>
     </html>
   );

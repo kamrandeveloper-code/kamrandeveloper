@@ -5,22 +5,16 @@ import AboutSection from "@/components/AboutSection";
 import CaseStudiesTeaser from "@/components/CaseStudiesTeaser";
 import BlogTeaser from "@/components/BlogTeaser";
 import CTASection from "@/components/CTASection";
-import { baseMetadata } from "@/lib/seo";
-import { personSchema, websiteSchema } from "@/lib/schema";
+import { baseMetadata, BASE_URL } from "@/lib/seo";
 
-export const metadata = baseMetadata();
+export const metadata = baseMetadata({
+  alternates: { canonical: BASE_URL },
+  openGraph: { url: BASE_URL },
+});
 
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema()) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
-      />
       <HeroSection />
       <ServicesSection />
       <ProjectsSection />

@@ -54,7 +54,7 @@ export const projects: Project[] = [
     image: "/placeholder.jpg",
     featured: true,
     demo: {
-      url: "https://demo.kamrandev.com/dental",
+      url: `${process.env.NEXT_PUBLIC_DEMO_BASE_URL ?? "https://demo.kamrandev.com"}/dental`,
       email: "demo@dental.com",
       password: "Demo@1234",
     },
@@ -115,7 +115,7 @@ The clinic has been using the system for over a year. Double bookings are elimin
     image: "/placeholder.jpg",
     featured: true,
     demo: {
-      url: "https://demo.kamrandev.com/ecommerce",
+      url: `${process.env.NEXT_PUBLIC_DEMO_BASE_URL ?? "https://demo.kamrandev.com"}/ecommerce`,
       email: "demo@shop.com",
       password: "Demo@1234",
     },
@@ -173,7 +173,7 @@ The platform launched with twelve active vendors and processed over five hundred
     image: "/placeholder.jpg",
     featured: true,
     demo: {
-      url: "https://demo.kamrandev.com/pos",
+      url: `${process.env.NEXT_PUBLIC_DEMO_BASE_URL ?? "https://demo.kamrandev.com"}/pos`,
       email: "demo@pos.com",
       password: "Demo@1234",
     },
@@ -232,7 +232,7 @@ The system processes an average of two hundred transactions per day across two r
     image: "/placeholder.jpg",
     featured: true,
     demo: {
-      url: "https://demo.kamrandev.com/school",
+      url: `${process.env.NEXT_PUBLIC_DEMO_BASE_URL ?? "https://demo.kamrandev.com"}/school`,
       email: "demo@school.com",
       password: "Demo@1234",
     },

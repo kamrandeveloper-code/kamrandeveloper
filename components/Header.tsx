@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { developer } from "@/data/developer";
+import Image from "next/image";
 
 const navLinks = [
   { label: "About", href: "/about" },
@@ -36,12 +37,16 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link
-            href="/"
-            className="font-display font-bold text-xl text-text hover:text-accent transition-colors duration-200"
-          >
-            {developer.name}
-          </Link>
+        <Link href="/" className="flex items-center">
+  <Image
+    src="/logo.png"
+    alt="Kamran Logo"
+    width={180}
+    height={100}
+    priority
+    className="w-[100px] lg:w-[180px] h-auto"
+  />
+</Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-5">

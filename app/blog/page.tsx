@@ -2,17 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
+import { baseMetadata, BASE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = baseMetadata({
   title: "Blog",
   description:
     "Articles on custom software development, business automation, and technical guides. For business owners and developers.",
+  alternates: { canonical: `${BASE_URL}/blog` },
   openGraph: {
     title: "Blog — Kamran Custom Software Developer",
     description:
       "Business software articles and technical guides. When to replace Excel, custom vs SaaS, ASP.NET Core architecture.",
+    url: `${BASE_URL}/blog`,
   },
-};
+});
 
 export default function BlogPage() {
   const businessPosts = blogPosts.filter((p) => p.category === "Business");
