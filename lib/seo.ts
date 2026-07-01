@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 
-export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kamrandev.com";
+export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.kamrandeveloper.com";
+export const NON_WWW_URL = "https://kamrandeveloper.com";
+
+export function buildAlternates(path = "") {
+  return {
+    canonical: `${BASE_URL}${path}`,
+    languages: { en: `${NON_WWW_URL}${path}` },
+  };
+}
 
 const OG_IMAGE = {
   url: `${BASE_URL}/opengraph.jpeg`,

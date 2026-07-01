@@ -4,13 +4,13 @@ import { developer } from "@/data/developer";
 import { skillGroups } from "@/data/skills";
 import { experiences } from "@/data/experience";
 import { personSchema } from "@/lib/schema";
-import { baseMetadata, BASE_URL } from "@/lib/seo";
+import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = baseMetadata({
   title: "About Kamran — Custom Software Developer",
   description:
     "Kamran is a Full Stack Software Developer based in Pakistan specializing in custom business software, management systems, API integrations, and e-commerce platforms for healthcare, education, and retail industries.",
-  alternates: { canonical: `${BASE_URL}/about` },
+  alternates: buildAlternates("/about"),
   openGraph: {
     title: "About Kamran — Custom Software Developer",
     description:

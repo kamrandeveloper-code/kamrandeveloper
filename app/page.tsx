@@ -5,10 +5,10 @@ import AboutSection from "@/components/AboutSection";
 import CaseStudiesTeaser from "@/components/CaseStudiesTeaser";
 import BlogTeaser from "@/components/BlogTeaser";
 import CTASection from "@/components/CTASection";
-import { baseMetadata, BASE_URL } from "@/lib/seo";
+import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 
 export const metadata = baseMetadata({
-  alternates: { canonical: BASE_URL },
+  alternates: buildAlternates(),
   openGraph: { url: BASE_URL },
 });
 

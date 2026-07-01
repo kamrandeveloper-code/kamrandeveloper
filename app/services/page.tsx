@@ -4,13 +4,13 @@ import Link from "next/link";
 import { services } from "@/data/services";
 import { ServiceCard, FeaturedServiceCard, serviceIcons } from "@/components/ServiceCard";
 import { serviceSchema } from "@/lib/schema";
-import { baseMetadata, BASE_URL } from "@/lib/seo";
+import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = baseMetadata({
   title: "Software Development Services",
   description:
     "Custom software development services: management systems, business software, API integrations, admin dashboards, AI-powered features, and e-commerce solutions.",
-  alternates: { canonical: `${BASE_URL}/services` },
+  alternates: buildAlternates("/services"),
   openGraph: {
     title: "Software Development Services — Kamran",
     description: "Custom software development — management systems, business software, API integrations, and e-commerce solutions.",

@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
-import { baseMetadata, BASE_URL } from "@/lib/seo";
+import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = baseMetadata({
   title: "Blog",
   description:
     "Articles on custom software development, business automation, and technical guides. For business owners and developers.",
-  alternates: { canonical: `${BASE_URL}/blog` },
+  alternates: buildAlternates("/blog"),
   openGraph: {
     title: "Blog — Kamran Custom Software Developer",
     description:

@@ -1,10 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: [
-    process.env.DEV_ALLOWED_ORIGIN ?? "karin-hydrotactic-differentially.ngrok-free.dev",
-    '10.17.160.42'
-  ],
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "kamrandeveloper.com",
+          },
+        ],
+        destination: "https://www.kamrandeveloper.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
