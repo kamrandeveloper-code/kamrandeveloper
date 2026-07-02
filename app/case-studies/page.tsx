@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = baseMetadata({
   title: "Case Studies",
@@ -17,8 +18,14 @@ export const metadata: Metadata = baseMetadata({
 });
 
 export default function CaseStudiesPage() {
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Case Studies", url: `${BASE_URL}/case-studies` },
+  ]);
+
   return (
     <main className="min-h-screen bg-bg pt-24 pb-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}

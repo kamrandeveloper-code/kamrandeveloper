@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { services } from "@/data/services";
 import { ServiceCard, FeaturedServiceCard, serviceIcons } from "@/components/ServiceCard";
-import { serviceSchema } from "@/lib/schema";
+import { serviceSchema, breadcrumbSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL } from "@/lib/seo";
 
 interface Props {
@@ -38,12 +38,19 @@ export default async function ServiceDetailPage({ params }: Props) {
   const related = services.filter((s) => s.id !== slug).slice(0, 3);
   const icon = serviceIcons[service.id];
 
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Services", url: `${BASE_URL}/services` },
+    { name: service.title, url: `${BASE_URL}/services/${service.id}` },
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema({ title: service.title, description: service.description })) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       <main className="min-h-screen bg-bg pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

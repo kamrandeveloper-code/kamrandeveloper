@@ -17,7 +17,7 @@ const inter = Inter({
 import Footer from "@/components/Footer";
 import ContactFloat from "@/components/ContactFloat";
 import { baseMetadata } from "@/lib/seo";
-import { personSchema, websiteSchema } from "@/lib/schema";
+import { personSchema, websiteSchema, organizationSchema } from "@/lib/schema";
 
 export const metadata: Metadata = baseMetadata();
 
@@ -36,6 +36,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
         />
         <Header />
         <div className="flex-1">{children}</div>

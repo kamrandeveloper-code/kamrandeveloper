@@ -3,7 +3,7 @@ import Link from "next/link";
 import { developer } from "@/data/developer";
 import { skillGroups } from "@/data/skills";
 import { experiences } from "@/data/experience";
-import { personSchema } from "@/lib/schema";
+import { personSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = baseMetadata({
@@ -58,13 +58,74 @@ const technologies = [
   { category: "Tools", items: ["Git", "REST APIs", "JWT", "Entity Framework Core"] },
 ];
 
+const aboutMeFaqs = [
+  {
+    q: "Where are you based?",
+    a: "I'm based in Pakistan and work remotely with clients worldwide. Time-zone differences have never been a problem — I'm flexible with communication hours.",
+  },
+  {
+    q: "Are you a freelancer or an agency?",
+    a: "I'm a solo freelance developer. You work directly with me from the first call to final delivery — no account managers, no handoffs to junior developers.",
+  },
+  {
+    q: "Do you work with international clients?",
+    a: "Yes. I communicate in English and have experience working with clients across different countries. All project communication, proposals, and documentation are in English.",
+  },
+  {
+    q: "What industries do you know well?",
+    a: "Healthcare, dental, pharmacy, education, retail, and e-commerce. These are sectors where off-the-shelf tools consistently fall short and custom software makes a real operational difference.",
+  },
+  {
+    q: "Are you available right now?",
+    a: "Check the availability badge at the top of this page. When I'm available I take on new projects — when I'm fully booked I'm honest about it so you can plan accordingly.",
+  },
+];
+
+const aboutWorkFaqs = [
+  {
+    q: "What kind of projects do you take on?",
+    a: "Custom business software — management systems (clinic, school, inventory), POS platforms, e-commerce and multi-vendor marketplaces, API integrations, and web applications built around specific operational workflows.",
+  },
+  {
+    q: "How long does a typical project take?",
+    a: "A focused management system or small web app takes 4–6 weeks. A multi-module platform with complex workflows runs 2–4 months. I give a clear timeline estimate in every proposal before work begins.",
+  },
+  {
+    q: "What does your process look like?",
+    a: "Discovery call → written proposal (scope, timeline, price) → design & feedback → development in milestones → testing → handover. You see progress throughout, not just at the end.",
+  },
+  {
+    q: "Do you build mobile apps?",
+    a: "I build web-based software that works well on all screen sizes including mobile browsers. I don't build native iOS or Android apps — if that's your need I'll tell you upfront.",
+  },
+  {
+    q: "What happens after the project is delivered?",
+    a: "You receive full source code, deployment, and a handover session. I include a short support window for bug fixes. Ongoing maintenance or feature additions can be arranged as a separate agreement.",
+  },
+  {
+    q: "Can you work with an existing codebase?",
+    a: "Yes. I can review, extend, or refactor existing projects. I'll be upfront if the existing code has issues that need addressing before new work can be added cleanly.",
+  },
+];
+
 export default function AboutPage() {
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "About", url: `${BASE_URL}/about` },
+  ]);
+
+  const faqs = faqSchema(
+    [...aboutMeFaqs, ...aboutWorkFaqs].map((item) => ({ question: item.q, answer: item.a }))
+  );
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema()) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqs) }} />
       <main className="min-h-screen bg-bg pt-24 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -249,28 +310,7 @@ export default function AboutPage() {
                   About me
                 </h3>
                 <div className="space-y-2">
-                  {[
-                    {
-                      q: "Where are you based?",
-                      a: "I'm based in Pakistan and work remotely with clients worldwide. Time-zone differences have never been a problem — I'm flexible with communication hours.",
-                    },
-                    {
-                      q: "Are you a freelancer or an agency?",
-                      a: "I'm a solo freelance developer. You work directly with me from the first call to final delivery — no account managers, no handoffs to junior developers.",
-                    },
-                    {
-                      q: "Do you work with international clients?",
-                      a: "Yes. I communicate in English and have experience working with clients across different countries. All project communication, proposals, and documentation are in English.",
-                    },
-                    {
-                      q: "What industries do you know well?",
-                      a: "Healthcare, dental, pharmacy, education, retail, and e-commerce. These are sectors where off-the-shelf tools consistently fall short and custom software makes a real operational difference.",
-                    },
-                    {
-                      q: "Are you available right now?",
-                      a: "Check the availability badge at the top of this page. When I'm available I take on new projects — when I'm fully booked I'm honest about it so you can plan accordingly.",
-                    },
-                  ].map(({ q, a }) => (
+                  {aboutMeFaqs.map(({ q, a }) => (
                     <details key={q} className="group bg-surface border border-border rounded-xl overflow-hidden">
                       <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none hover:bg-bg/50 transition-colors duration-150">
                         <span className="font-medium text-text text-sm">{q}</span>
@@ -296,32 +336,7 @@ export default function AboutPage() {
                   About my work
                 </h3>
                 <div className="space-y-2">
-                  {[
-                    {
-                      q: "What kind of projects do you take on?",
-                      a: "Custom business software — management systems (clinic, school, inventory), POS platforms, e-commerce and multi-vendor marketplaces, API integrations, and web applications built around specific operational workflows.",
-                    },
-                    {
-                      q: "How long does a typical project take?",
-                      a: "A focused management system or small web app takes 4–6 weeks. A multi-module platform with complex workflows runs 2–4 months. I give a clear timeline estimate in every proposal before work begins.",
-                    },
-                    {
-                      q: "What does your process look like?",
-                      a: "Discovery call → written proposal (scope, timeline, price) → design & feedback → development in milestones → testing → handover. You see progress throughout, not just at the end.",
-                    },
-                    {
-                      q: "Do you build mobile apps?",
-                      a: "I build web-based software that works well on all screen sizes including mobile browsers. I don't build native iOS or Android apps — if that's your need I'll tell you upfront.",
-                    },
-                    {
-                      q: "What happens after the project is delivered?",
-                      a: "You receive full source code, deployment, and a handover session. I include a short support window for bug fixes. Ongoing maintenance or feature additions can be arranged as a separate agreement.",
-                    },
-                    {
-                      q: "Can you work with an existing codebase?",
-                      a: "Yes. I can review, extend, or refactor existing projects. I'll be upfront if the existing code has issues that need addressing before new work can be added cleanly.",
-                    },
-                  ].map(({ q, a }) => (
+                  {aboutWorkFaqs.map(({ q, a }) => (
                     <details key={q} className="group bg-surface border border-border rounded-xl overflow-hidden">
                       <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none hover:bg-bg/50 transition-colors duration-150">
                         <span className="font-medium text-text text-sm">{q}</span>

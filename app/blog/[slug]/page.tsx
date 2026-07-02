@@ -68,6 +68,7 @@ function ArticlePage({ slug }: { slug: string }) {
     description: post.excerpt,
     datePublished: post.date,
     url: `${BASE_URL}/blog/${post.slug}`,
+    image: `${BASE_URL}/opengraph.jpeg`,
   });
 
   const breadcrumb = breadcrumbSchema([
@@ -167,7 +168,15 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
     description: project.description,
     datePublished: "2025-01-01",
     url: `${BASE_URL}/blog/${project.slug}`,
+    image: `${BASE_URL}/opengraph.jpeg`,
   });
+
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Blog", url: `${BASE_URL}/blog` },
+    { name: "Case Studies", url: `${BASE_URL}/case-studies` },
+    { name: project.title, url: `${BASE_URL}/blog/${project.slug}` },
+  ]);
 
   const paragraphs = project.blogPost
     .split("\n\n")
@@ -177,6 +186,7 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <main className="min-h-screen bg-bg pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { blogPosts } from "@/data/blog";
 import { projects } from "@/data/projects";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = baseMetadata({
   title: "Blog",
@@ -20,9 +21,14 @@ export const metadata: Metadata = baseMetadata({
 export default function BlogPage() {
   const businessPosts = blogPosts.filter((p) => p.category === "Business");
   const technicalPosts = blogPosts.filter((p) => p.category === "Technical");
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Blog", url: `${BASE_URL}/blog` },
+  ]);
 
   return (
     <main className="min-h-screen bg-bg pt-24 pb-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}

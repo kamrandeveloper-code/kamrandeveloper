@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { services } from "@/data/services";
 import { ServiceCard, FeaturedServiceCard, serviceIcons } from "@/components/ServiceCard";
-import { serviceSchema } from "@/lib/schema";
+import { serviceSchema, breadcrumbSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = baseMetadata({
@@ -20,9 +20,14 @@ export const metadata: Metadata = baseMetadata({
 
 export default function ServicesPage() {
   const schemas = services.map((s) => serviceSchema({ title: s.title, description: s.description }));
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Services", url: `${BASE_URL}/services` },
+  ]);
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       {schemas.map((schema, i) => (
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}

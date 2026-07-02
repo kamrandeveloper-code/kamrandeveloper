@@ -5,12 +5,19 @@ import Link from "next/link";
 import { developer } from "@/data/developer";
 import EmailPopup from "@/components/EmailPopup";
 import EmailCompose from "@/components/EmailCompose";
+import { breadcrumbSchema } from "@/lib/schema";
+import { BASE_URL } from "@/lib/seo";
 
 export default function ContactPage() {
   const [emailOpen, setEmailOpen] = useState(false);
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Contact", url: `${BASE_URL}/contact` },
+  ]);
 
   return (
     <main className="min-h-screen bg-bg pt-28 pb-24 overflow-x-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       {/* Email popup modal */}
       {emailOpen && (

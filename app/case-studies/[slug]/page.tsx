@@ -39,6 +39,7 @@ export default async function CaseStudyPage({ params }: Props) {
     description: project.description,
     datePublished: "2025-01-01",
     url: `${BASE_URL}/case-studies/${project.slug}`,
+    image: `${BASE_URL}/opengraph.jpeg`,
   });
 
   const breadcrumb = breadcrumbSchema([

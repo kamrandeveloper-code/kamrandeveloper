@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { projects } from "@/data/projects";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = baseMetadata({
   title: "Projects",
@@ -26,9 +27,14 @@ const industryColors: Record<string, string> = {
 
 export default function ProjectsPage() {
   const industries = Array.from(new Set(projects.map((p) => p.industry)));
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: "Projects", url: `${BASE_URL}/projects` },
+  ]);
 
   return (
     <main className="min-h-screen bg-bg pt-28 pb-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Hero: text left, illustration right ── */}
