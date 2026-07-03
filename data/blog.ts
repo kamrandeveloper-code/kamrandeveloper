@@ -198,4 +198,111 @@ For intranet deployment, IIS on Windows Server is the standard choice. For cloud
 
 Management systems are technically demanding because they combine multiple concerns: complex domain logic, multi-user access control, mixed transactional and analytical workloads, and high user expectations for reliability. ASP.NET Core provides the foundation — dependency injection, middleware, authentication — but the architecture above the framework determines whether the system remains maintainable as requirements evolve.`,
   },
+  {
+    slug: "if-it-works-dont-touch-it-developer-mindset",
+    title: "\"If It Works, Don't Touch It\" — The Developer Mindset That Costs You More Than You Think",
+    category: "Technical",
+    date: "2026-07-03",
+    excerpt:
+      "Why this common advice is actually one of the most expensive habits in software development — and what senior developers do instead.",
+    tags: [
+      "Software Development",
+      "Junior Developer",
+      "Senior Developer",
+      "Refactoring",
+      "Clean Code",
+      "Technical Debt",
+      "Programming Best Practices",
+      "Code Maintainability",
+      "Software Engineering",
+    ],
+    content: `## "If It Works, Don't Touch It" — The Developer Mindset That Costs You More Than You Think
+
+### Why this common advice is actually one of the most expensive habits in software development
+
+Every developer has heard it. Maybe you've said it yourself:
+
+"Don't touch that. It works."
+
+And honestly? In the moment, it makes sense. The code runs. Tests pass. Users are happy. Why would you risk breaking something by changing it?
+
+Here's the problem: working code and healthy code are not the same thing.
+
+This article breaks down why "if it works, don't touch it" is a trap — and what senior developers do instead.
+
+### What Does "If It Works, Don't Touch It" Actually Mean?
+
+On the surface, it's a principle of risk management. Don't fix what isn't broken. Don't refactor for the sake of refactoring. Don't introduce unnecessary changes.
+
+That reasoning is sound — in theory.
+
+In practice, this phrase gets applied to code that:
+
+- Has zero test coverage
+- Nobody on the team fully understands
+- Relies on undocumented behavior
+- Uses outdated patterns that nobody would write today
+- Contains "quick fixes" that accumulated over years
+
+This code doesn't work — it survives. And there's a meaningful difference.
+
+### The Junior vs Senior Developer Mindset
+
+Here's the core difference that separates senior developers from junior developers:
+
+| | Junior Developer | Senior Developer |
+|---|---|---|
+| Primary goal | Make it work | Make it sustainable |
+| Attitude toward legacy code | Leave it alone | Pay down the debt |
+| Risk assessment | "What if I break it?" | "What if I don't fix it?" |
+| Before changing code | Just changes it | Writes tests first |
+| Long-term thinking | Ships the feature | Ships the feature + maintainability |
+
+The junior developer protects the code from change. The senior developer protects the codebase from decay.
+
+### Why "Don't Touch It" Compounds the Problem
+
+Code debt doesn't stay flat — it grows.
+
+Every line of code that nobody understands becomes a blocker. Every untested function becomes a risk that scales with your system. Every "quick fix" that was never properly integrated becomes a bug waiting to happen at the worst possible time.
+
+The cost isn't felt immediately. It's felt when:
+
+- A new feature takes three times longer because the existing code is spaghetti
+- A production incident occurs and nobody can trace the root cause
+- A developer leaves and takes the only understanding of a critical module with them
+- You need to scale the system and the foundation can't support it
+
+By then, the cost of fixing it is 10x what it would have been to address it when the code was fresh in your mind.
+
+### What Senior Developers Do Instead
+
+**1. Write tests before touching anything.** If the code has no tests, the first step isn't refactoring — it's adding test coverage. This gives you a safety net so changes are verified, not guessed.
+
+**2. Refactor in small, safe increments.** Don't rewrite the entire module in one sitting. Make small, deliberate changes. Each change should leave the codebase in a better state than before.
+
+**3. Ask: will the next developer understand this?** If you came back to this code in six months with no context, would you know what it does? If not, it's not working — it's just surviving.
+
+**4. Pay down debt intentionally.** Technical debt is real. The mature approach isn't pretending it doesn't exist — it's planning when and how to address it before it becomes unmanageable.
+
+**5. Document the "why."** Code tells you what. Comments (when they're actually useful) tell you why. A brief comment explaining a non-obvious decision saves hours of confusion later.
+
+### When "Don't Touch It" Is Actually Correct
+
+To be fair — there are legitimate cases where this principle applies:
+
+- Legacy code with zero test coverage and high business risk — sometimes the right call is to not touch it until you have proper safeguards
+- Code that is being deprecated — if the system is being replaced, spending time refactoring it is a waste
+- Critical hotpaths with proven stability — untested changes to heavily-used code can introduce hard-to-catch regressions
+
+The key word is judgment. A senior developer knows when to touch it and when to leave it. A junior developer defaults to "leave it alone" in almost every situation.
+
+### The Real Skill Is Knowing When to Refactor
+
+The difference between a junior and senior developer isn't that seniors refactor everything. It's that they have the judgment to know when refactoring is worth the risk — and the discipline to do it safely by writing tests first, keeping changes small, and verifying everything before it ships.
+
+"If it works, don't touch it" is safe advice for the short term. It's reckless advice for anyone building software that needs to last.
+
+The goal isn't to never touch working code. The goal is to touch it intentionally, safely, and better than before.`,
+  },
 ];

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>One-Click Cross-Poster · karmandeveloper.com</title>
+<style>
+:root{
+  --bg:#0f1117; --card:#1a1d29; --border:#2a2f3f;
+  --txt:#e4e6eb; --muted:#8b92a8;
+  --accent:#7c5cff; --accent2:#22c55e; --danger:#ef4444;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  background:var(--bg); color:var(--txt); padding:24px; line-height:1.6;
+}
+.wrap{max-width:1280px; margin:0 auto;}
+
+header{
+  background:linear-gradient(135deg, #1a1d29 0%, #2a1d4f 100%);
+  border:1px solid var(--border); border-radius:14px;
+  padding:32px; margin-bottom:24px;
+}
+header h1{font-size:28px; margin-bottom:6px;}
+header p{color:var(--muted); font-size:14px;}
+header .controls{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;}
+header input, header textarea{
+  background:#0a0c14; border:1px solid var(--border); color:var(--txt);
+  padding:10px 14px; border-radius:8px; font-size:14px;
+  font-family:inherit; min-width:240px;
+}
+header textarea{width:100%; min-height:120px; margin-top:8px;}
+header button{
+  background:var(--accent); color:white; border:none;
+  padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:600;
+}
+header button:hover{background:#6a4ae6;}
+
+.banner{
+  background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3);
+  border-radius:10px; padding:14px 18px; margin-bottom:24px;
+  font-size:13px; color:var(--accent2);
+}
+.banner strong{display:block; margin-bottom:4px; color:#22c55e;}
+
+.toolbar{
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;
+}
+.toolbar button{
+  background:transparent; color:var(--muted);
+  border:1px solid var(--border); padding:7px 14px; border-radius:20px;
+  cursor:pointer; font-size:13px; transition:all 0.15s;
+}
+.toolbar button.active, .toolbar button:hover{
+  background:var(--accent); color:white; border-color:var(--accent);
+}
+
+.platform{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:18px 22px; margin-bottom:14px;
+  display:grid; grid-template-columns: 1fr 360px; gap:18px;
+  transition: border-color 0.15s;
+}
+.platform:hover{border-color:var(--accent);}
+.platform h3{
+  font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;
+}
+.platform .url{font-size:12px; color:var(--muted); margin-bottom:10px;}
+.platform .url a{color:var(--accent); text-decoration:none; word-break:break-all;}
+.platform .url a:hover{text-decoration:underline;}
+.platform .cat{
+  background:rgba(124,92,255,0.15); color:var(--accent);
+  font-size:10px; padding:2px 8px; border-radius:10px;
+  font-weight:600; text-transform:uppercase;
+}
+.platform .notes{font-size:13px; color:var(--muted);}
+.platform .post-text{
+  background:#0a0c14; border:1px solid var(--border);
+  border-radius:8px; padding:12px 14px;
+  font-family:"SF Mono",Monaco,monospace; font-size:12px;
+  color:#c4c8d8; white-space:pre-wrap;
+  height:120px; overflow-y:auto; resize:vertical;
+  width:100%; outline:none;
+}
+.platform .post-text:focus{border-color:var(--accent);}
+.platform .post-actions{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;}
+.platform .post-actions button{
+  background:transparent; border:1px solid var(--border); color:var(--muted);
+  padding:5px 12px; border-radius:6px; cursor:pointer; font-size:12px;
+}
+.platform .post-actions button.primary{
+  background:var(--accent); color:white; border-color:var(--accent);
+}
+.platform .post-actions button:hover{color:var(--txt);}
+.platform .row{grid-column:1/-1; display:flex; gap:8px; flex-wrap:wrap;}
+
+.tag{
+  display:inline-block; padding:2px 8px; border-radius:10px;
+  font-size:11px; font-weight:600;
+}
+.tag.do{background:rgba(34,197,94,0.15); color:#22c55e;}
+.tag.nf{background:rgba(245,158,11,0.15); color:#f59e0b;}
+.tag.pr{background:rgba(59,130,246,0.15); color:#3b82f6;}
+
+@media(max-width:768px){
+  .platform{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <h1>🚀 One-Click Cross-Poster for karmandeveloper.com</h1>
+  <p>Paste your article title + URL once, copy platform-specific post text, hit "Open all" to launch every publishing window in parallel.</p>
+  <div class="controls">
+    <input id="title" placeholder="Article title" value="How I Built My Developer Brand From Zero: A Complete Playbook (2026)" style="flex:1; min-width:300px;">
+    <input id="url" placeholder="Canonical URL" value="https://karmandeveloper.com/blog/developer-brand-from-zero" style="flex:1; min-width:300px;">
+  </div>
+  <div class="controls">
+    <textarea id="summary" placeholder="One-line summary used in posts">A founder-grade walkthrough of how a solo developer builds a personal brand that compounds — name, domain, content, distribution, and backlinking. 22 min read, full templates included.</textarea>
+    <button onclick="regenerateAll()">🔄 Regenerate posts</button>
+    <button onclick="openAll()" style="background:var(--accent2);">🚀 Open all posting pages</button>
+  </div>
+</header>
+
+<div class="banner">
+  <strong>How to use this:</strong>
+  (1) Replace title/URL if you're posting something different.
+  (2) Edit any platform's text — it remembers your changes.
+  (3) "Copy" puts the platform-specific post on your clipboard.
+  (4) "Open" launches the publishing page in a new tab.
+  (5) "Open all" launches them all (you'll have ~15 tabs — paste and publish into each).
+</div>
+
+<div class="toolbar">
+  <button class="active" onclick="filterAll()">All</button>
+  <button onclick="filterCat('Social')">Social</button>
+  <button onclick="filterCat('Dev')">Dev Platforms</button>
+  <button onclick="filterCat('Writing')">Writing</button>
+  <button onclick="filterCat('Bookmark')">Bookmark</button>
+  <button onclick="filterCat('Forum')">Forum</button>
+</div>
+
+<div id="platforms"></div>
+
+</div>
+
+<script>
+/* === Platform catalog with URL templates and post generators === */
+const PLATFORMS = [
+  // === Social ===
+  {cat:"Social", name:"X (Twitter)", url:"https://x.com/compose/post",
+    tag:"pr", tags:["profile"], openAs:"",
+    template: (t,u,s) => `${t.split(':')[0]}.
+
+${s}
+
+→ ${u}`},
+
+  {cat:"Social", name:"LinkedIn", url:"https://www.linkedin.com/feed/?shareActive=true",
+    tag:"pr", tags:["profile"], openAs:"",
+    template: (t,u,s) => `${s}
+
+If you're a developer who feels invisible despite shipping great work, this is the article I wish someone had handed me in year one. 22 minutes, full templates, no fluff.
+
+🔗 ${u}
+
+#developers #career`},
+
+  {cat:"Social", name:"Threads", url:"https://www.threads.net/",
+    tag:"pr", tags:["profile"],
+    template: (t,u,s) => `${t.split(':')[0]} — new on my blog.
+
+${s}
+
+${u}`},
+
+  {cat:"Social", name:"Mastodon", url:"https://mastodon.social/share",
+    tag:"pr", tags:["profile"],
+    template: (t,u,s) => `New on the blog: ${t}
+
+${s}
+
+${u} #developer`},
+
+  {cat:"Social", name:"Bluesky", url:"https://bsky.app/",
+    tag:"pr", tags:["profile"],
+    template: (t,u,s) => `${t.split(':')[0]}.\n\n${s}\n\n${u}`},
+
+  {cat:"Social", name:"Facebook (own profile)", url:"https://www.facebook.com/",
+    tag:"pr", tags:["profile"],
+    template: (t,u,s) => `Just published: ${t}\n\n${s}\n\nRead it here: ${u}`},
+
+  {cat:"Social", name:"Reddit r/programming", url:"https://www.reddit.com/r/programming/submit",
+    tag:"nf", tags:["forum"],
+    template: (t,u,s) => `[Article] How I built my developer brand from zero — full playbook (2026)
+
+Author: Kamran (cross-post from karmandeveloper.com).\n\n${s}\n\nLink: ${u}`},
+
+  {cat:"Social", name:"Reddit r/webdev", url:"https://www.reddit.com/r/webdev/submit",
+    tag:"nf", tags:["forum"],
+    template: (t,u,s) => `[Article] Developer branding playbook: domain → profile-links → cross-posting\n\n${s}\n\nLink: ${u}`},
+
+  // === Dev Platforms ===
+  {cat:"Dev", name:"Dev.to", url:"https://dev.to/new",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\nBuilt my developer brand from zero — five steps including JSON-LD, profile-link matrix, and the cross-posting playbook. Full templates, no fluff, 22 minutes.
+
+#career #seo #personalbrand #webdev #github`},
+
+  {cat:"Dev", name:"Hashnode", url:"https://hashnode.com/editor/new",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\nA founder-grade walkthrough of how a solo developer builds a personal brand that compounds — name, domain, content, distribution, and backlinking.\n\nBuilt and tested in my own journey. Full templates inside.`},
+
+  {cat:"Dev", name:"freeCodeAmp (forum story)", url:"https://forum.freecodecamp.org/new-topic",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\n${s}\n\nFull article: ${u}`},
+
+  {cat:"Dev", name:"CodeNewbie Community", url:"https://community.codenewbie.org/new-topic",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `Just published: ${t}\n\n${s}\n\n${u}`},
+
+  {cat:"Dev", name:"IndieHackers", url:"https://www.indiehackers.com/post/new",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `Built my developer brand in 2 years — full playbook\n\n${s}\n\n${u}`},
+
+  // === Writing ===
+  {cat:"Writing", name:"Medium", url:"https://medium.com/new-story",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\n${s}\n\n[A version of this post also lives on my portfolio at ${u}. Feedback welcome in the comments.]`},
+
+  {cat:"Writing", name:"Substack", url:"https://substack.com/post/new",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\n(Subscribers got this first. Also published on my blog: ${u})`},
+
+  {cat:"Writing", name:"Blogger", url:"https://www.blogger.com/blog/post-create",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\n${s}\n\nOriginally published on ${u}.`},
+
+  {cat:"Writing", name:"Tumblr", url:"https://www.tumblr.com/new/blog/link",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t} — ${s} (${u})`},
+
+  {cat:"Writing", name:"Telegraph", url:"https://telegra.ph/",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t}\n\n${s}\n\n${u}`},
+
+  {cat:"Writing", name:"Notion (public page)", url:"https://www.notion.so/new",
+    tag:"do", tags:["publish"],
+    template: (t,u,s) => `${t} — ${s}`},
+
+  // === Bookmark + Aggregator ===
+  {cat:"Bookmark", name:"Pocket", url:"https://getpocket.com/submit",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `Submit link: ${u}`},
+
+  {cat:"Bookmark", name:"Diigo", url:"https://www.diigo.com/post",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `${t}\n\n${s}\n\n${u}`},
+
+  {cat:"Bookmark", name:"Pinboard (paid)", url:"https://pinboard.in/add",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `Bookmark: ${u}`},
+
+  {cat:"Bookmark", name:"Mix (StumbleUpon successor)", url:"https://mix.com/add",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `Submit: ${u}`},
+
+  {cat:"Bookmark", name:"Flipboard", url:"https://share.flipboard.com/create",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `${t} — ${s}`},
+
+  {cat:"Bookmark", name:"Instapaper", url:"https://www.instapaper.com/edit",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `Bookmark: ${u}`},
+
+  {cat:"Bookmark", name:"Linktree (link hub)", url:"https://linktr.ee/admin",
+    tag:"do", tags:["profile"],
+    template: (t,u,s) => `Add to "Latest post" link: ${u}`},
+
+  {cat:"Bookmark", name:"About.me landing", url:"https://about.me/edit",
+    tag:"do", tags:["profile"],
+    template: (t,u,s) => `Latest project: ${t} (${u})`},
+
+  // === Forum / Q&A ===
+  {cat:"Forum", name:"Quora — write answer", url:"https://www.quora.com/answer",
+    tag:"nf", tags:["answer"],
+    template: (t,u,s) => `(Find a question like "How do I build a developer brand?" and use this answer:)
+
+Great question — I wrote a full playbook on this recently. The short version:
+
+1. Buy the matching .com of your name (or your project's name).
+2. Stand up one strong portfolio page that loads sub-1s on mobile.
+3. Set up ~50 high-DA profiles with consistent handle, avatar, bio, and website URL.
+4. Publish one long-form article with JSON-LD, cross-post it to Medium / Dev.to / Hashnode / Substack.
+5. Submit to Google Search Console + Bing Webmaster Tools.
+
+Full post with templates: ${u}`},
+
+  {cat:"Forum", name:"Hacker News (Show HN)", url:"https://news.ycombinator.com/submit",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `Title: ${t}\n\n${s}\n\nURL: ${u}`},
+
+  {cat:"Forum", name:"Lobsters", url:"https://lobste.rs/",
+    tag:"do", tags:["submit"],
+    template: (t,u,s) => `Title: ${t}\nURL: ${u}\nTags: dev career\n\n${s}`},
+];
+
+let currentFilter = 'All';
+
+function render() {
+  const container = document.getElementById('platforms');
+  const title = document.getElementById('title').value || 'Untitled';
+  const url = document.getElementById('url').value || 'https://example.com';
+  const summary = document.getElementById('summary').value || '';
+
+  const list = PLATFORMS.filter(p => currentFilter === 'All' || p.cat === currentFilter);
+
+  container.innerHTML = list.map((p, i) => {
+    const post = p.template(title, url, summary);
+    return `
+    <div class="platform" data-cat="${p.cat}">
+      <div>
+        <h3>${p.name}
+          <span class="cat">${p.cat}</span>
+          <span class="tag ${p.tag}">${p.tag==='do'?'dofollow':p.tag==='nf'?'nofollow':'profile'}</span>
+        </h3>
+        <div class="url">→ <a href="${p.url}" target="_blank">${p.url}</a></div>
+        <div class="notes">${p.notes || ''}</div>
+      </div>
+      <div>
+        <textarea class="post-text" id="post-${i}" data-base="${encodeURIComponent(post)}">${post}</textarea>
+        <div class="post-actions">
+          <button class="primary" onclick="copyText(${i})">📋 Copy</button>
+          <button onclick="openOne('${p.url}')">↗ Open</button>
+          <button onclick="copyAndOpen(${i}, '${p.url}')">📋 + Open</button>
+          <button onclick="resetText(${i})">↺ Reset</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCat(c) {
+  currentFilter = c;
+  document.querySelectorAll('.toolbar button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+function filterAll() { filterCat('All'); }
+
+function regenerateAll() { render(); }
+
+function copyText(i) {
+  const t = document.getElementById('post-' + i);
+  t.select(); document.execCommand('copy');
+  event.target.textContent = '✓ Copied!';
+  setTimeout(() => event.target.textContent = '📋 Copy', 1500);
+}
+
+function openOne(url) { window.open(url, '_blank'); }
+
+function copyAndOpen(i, url) {
+  copyText(i); setTimeout(() => window.open(url, '_blank'), 200);
+}
+
+function resetText(i) {
+  const t = document.getElementById('post-' + i);
+  t.value = decodeURIComponent(t.dataset.base);
+}
+
+function openAll() {
+  // Open all platforms — note: browsers will block too many popups,
+  // best is to confirm first if user wants it
+  if (!confirm('This will open ' + PLATFORMS.length + ' tabs. Continue?')) return;
+  PLATFORMS.forEach((p, i) => {
+    setTimeout(() => window.open(p.url, '_blank', 'noopener'), i * 250);
+  });
+}
+
+// === URL parameters (deep linking) ===
+const p = new URLSearchParams(location.search);
+if (p.get('title')) document.getElementById('title').value = p.get('title');
+if (p.get('url')) document.getElementById('url').value = p.get('url');
+if (p.get('summary')) document.getElementById('summary').value = p.get('summary');
+
+document.getElementById('title').addEventListener('input', render);
+document.getElementById('url').addEventListener('input', render);
+document.getElementById('summary').addEventListener('input', render);
+
+render();
+</script>
+
+</body>
+</html>
