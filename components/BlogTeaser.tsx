@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { blogPosts } from "@/data/blog";
+import { getBlogPosts } from "@/lib/api";
 
-export default function BlogTeaser() {
+export default async function BlogTeaser() {
+  const blogPosts = await getBlogPosts();
   const recent = blogPosts.slice(0, 3);
 
   return (

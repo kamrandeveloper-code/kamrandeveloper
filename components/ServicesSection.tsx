@@ -1,28 +1,49 @@
 import Link from "next/link";
-import { services } from "@/data/services";
+import { getServices } from "@/lib/api";
 import { ServiceCard, FeaturedServiceCard } from "@/components/ServiceCard";
 
-export default function ServicesSection() {
+export default async function ServicesSection() {
+  const services = await getServices();
   return (
     <section className="pb-12 bg-bg relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mb-16">
-          <h2 className="font-display font-bold text-4xl sm:text-5xl text-text leading-tight mb-5">
-            Software that fits how your{" "}
-            <span className="text-accent">business actually runs</span>
-          </h2>
-          <p className="text-muted text-base sm:text-lg leading-relaxed">
-            Most businesses reach a point where spreadsheets and off-the-shelf tools stop working.
-            I build custom software tailored to your exact operations.
-          </p>
+        <div className="relative w-full mb-24 overflow-hidden rounded-3xl min-h-[320px] sm:min-h-[420px] lg:min-h-[500px]">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            src="/Custom%20Software%20Need.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(7,10,25,0.72) 0%, rgba(7,10,25,0.50) 48%, rgba(7,10,25,0.10) 100%)",
+            }}
+          />
+          <div className="absolute inset-0 z-10 flex flex-col justify-between p-8 sm:p-12">
+            <h2
+              className="font-display font-bold text-white"
+              style={{ maxWidth: "650px", fontSize: "clamp(2.5rem, 4vw, 4.5rem)", lineHeight: 1.05 }}
+            >
+              Software that fits how your <span className="text-accent">business actually runs</span>
+            </h2>
+            <p className="self-end text-right max-w-xs sm:max-w-sm text-white/85 text-sm sm:text-base leading-relaxed bg-black/30 backdrop-blur-sm rounded-xl px-4 py-3">
+              Most businesses reach a point where spreadsheets and off-the-shelf tools stop working.
+              I build custom software tailored to your exact operations.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((service) =>
             service.featured ? (
-              <FeaturedServiceCard key={service.id} service={service} />
+              <FeaturedServiceCard key={service.slug} service={service} />
             ) : (
-              <ServiceCard key={service.id} service={service} />
+              <ServiceCard key={service.slug} service={service} />
             )
           )}
         </div>

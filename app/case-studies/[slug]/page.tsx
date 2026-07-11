@@ -1,29 +1,33 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { projects } from "@/data/projects";
+import Image from "next/image";
+import { getCaseStudies, getCaseStudy } from "@/lib/api";
 import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
+import AboutMeCard from "@/components/AboutMeCard";
+import RelatedCarousel from "@/components/RelatedCarousel";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const caseStudies = await getCaseStudies();
+  return caseStudies.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
-  if (!project) return {};
+  const caseStudy = await getCaseStudy(slug);
+  if (!caseStudy) return {};
   return baseMetadata({
-    title: `${project.title} — Case Study`,
-    description: `How ${project.problem} was solved with custom software. ${project.result}`,
+    title: `${caseStudy.title} — Case Study`,
+    description: `How ${caseStudy.problem} was solved with custom software. ${caseStudy.result}`,
     alternates: { canonical: `${BASE_URL}/case-studies/${slug}` },
     openGraph: {
-      title: `${project.title} — Case Study | Kamran`,
-      description: project.description,
+      title: `${caseStudy.title} — Case Study | Kamran`,
+      description: caseStudy.description,
       url: `${BASE_URL}/case-studies/${slug}`,
     },
   });
@@ -31,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CaseStudyPage({ params }: Props) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getCaseStudy(slug);
   if (!project) notFound();
 
   const schema = articleSchema({
@@ -48,10 +52,13 @@ export default async function CaseStudyPage({ params }: Props) {
     { name: project.title, url: `${BASE_URL}/case-studies/${project.slug}` },
   ]);
 
-  const paragraphs = project.blogPost
+  const paragraphs = project.content
     .split("\n\n")
     .map((p) => p.trim())
     .filter(Boolean);
+
+  const allCaseStudies = await getCaseStudies();
+  const related = allCaseStudies.filter((c) => c.slug !== slug).slice(0, 6);
 
   return (
     <>
@@ -90,6 +97,19 @@ export default async function CaseStudyPage({ params }: Props) {
             </h1>
             <p className="text-muted text-xl leading-relaxed">{project.description}</p>
           </div>
+
+          {/* Cover image */}
+          {project.imageUrl && (
+            <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden mb-10 bg-surface border border-border">
+              <Image
+                src={project.imageUrl}
+                alt={project.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
+            </div>
+          )}
 
           {/* Summary cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
@@ -186,13 +206,26 @@ export default async function CaseStudyPage({ params }: Props) {
                 Get In Touch
               </Link>
               <Link
-                href={`/projects/${project.slug}`}
+                href="/projects"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium"
               >
-                Project overview
+                See other projects
               </Link>
             </div>
           </div>
+
+          <AboutMeCard />
+
+          <RelatedCarousel
+            heading="More case studies"
+            viewAllHref="/case-studies"
+            items={related.map((c) => ({
+              href: `/case-studies/${c.slug}`,
+              title: c.title,
+              excerpt: c.description,
+              tag: c.industry,
+            }))}
+          />
 
         </div>
       </main>

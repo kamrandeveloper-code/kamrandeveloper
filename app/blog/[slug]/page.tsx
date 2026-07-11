@@ -1,25 +1,32 @@
 ﻿import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { blogPosts } from "@/data/blog";
-import { projects, type Project } from "@/data/projects";
+import { marked } from "marked";
+import { getBlogPost, getBlogPosts, getProject, getProjects, type BlogPost, type Project } from "@/lib/api";
 import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
+import { injectHeadingIds } from "@/lib/toc";
+import { injectCtaCard } from "@/lib/embeds";
+import TableOfContents from "@/components/TableOfContents";
+import ScrollToHash from "@/components/ScrollToHash";
+import AboutMeCard from "@/components/AboutMeCard";
+import RelatedCarousel from "@/components/RelatedCarousel";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const [posts, projects] = await Promise.all([getBlogPosts(), getProjects()]);
   return [
-    ...blogPosts.map((p) => ({ slug: p.slug })),
+    ...posts.map((p) => ({ slug: p.slug })),
     ...projects.map((p) => ({ slug: p.slug })),
   ];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
   if (post) {
     return baseMetadata({
       title: post.title,
@@ -32,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     });
   }
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   if (project) {
     return baseMetadata({
       title: `${project.title} — Case Study`,
@@ -51,24 +58,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
-  const post = blogPosts.find((p) => p.slug === slug);
-  if (post) return <ArticlePage slug={slug} />;
+  const post = await getBlogPost(slug);
+  if (post) return <ArticlePage post={post} />;
 
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   if (project) return <ProjectCaseStudyPage project={project} />;
 
   notFound();
 }
 
-function ArticlePage({ slug }: { slug: string }) {
-  const post = blogPosts.find((p) => p.slug === slug)!;
+async function ArticlePage({ post }: { post: BlogPost }) {
+  const rawHtml = marked.parse(post.content, { async: false }) as string;
+  const { html: htmlWithHeadingIds, headings } = injectHeadingIds(rawHtml);
+  const { html, hasCta } = injectCtaCard(htmlWithHeadingIds);
+
+  const allPosts = await getBlogPosts();
+  const moreArticles = allPosts.filter((p) => p.slug !== post.slug).slice(0, 6);
 
   const schema = articleSchema({
     title: post.title,
     description: post.excerpt,
     datePublished: post.date,
     url: `${BASE_URL}/blog/${post.slug}`,
-    image: `${BASE_URL}/opengraph.jpeg`,
+    image: post.featuredImage ?? `${BASE_URL}/opengraph.jpeg`,
   });
 
   const breadcrumb = breadcrumbSchema([
@@ -76,8 +88,6 @@ function ArticlePage({ slug }: { slug: string }) {
     { name: "Blog", url: `${BASE_URL}/blog` },
     { name: post.title, url: `${BASE_URL}/blog/${post.slug}` },
   ]);
-
-  const paragraphs = post.content.split("\n\n").map((p) => p.trim()).filter(Boolean);
 
   return (
     <>
@@ -93,6 +103,15 @@ function ArticlePage({ slug }: { slug: string }) {
             <span>/</span>
             <span className="text-text line-clamp-1">{post.title}</span>
           </nav>
+
+          {post.featuredImage && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={post.featuredImage}
+              alt={post.title}
+              className="w-full max-h-[420px] object-cover rounded-2xl border border-border mb-10"
+            />
+          )}
 
           <div className="mb-10">
             <div className="flex items-center gap-3 mb-4">
@@ -117,44 +136,44 @@ function ArticlePage({ slug }: { slug: string }) {
             ))}
           </div>
 
-          <div className="space-y-5">
-            {paragraphs.map((para, i) => {
-              if (para.startsWith("## ")) {
-                return (
-                  <h2 key={i} className="font-display font-bold text-2xl sm:text-3xl text-text mt-12 mb-2">
-                    {para.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (para.startsWith("### ")) {
-                return (
-                  <h3 key={i} className="font-display font-bold text-xl text-text mt-8 mb-2">
-                    {para.replace("### ", "")}
-                  </h3>
-                );
-              }
-              return (
-                <p key={i} className="text-muted leading-relaxed">
-                  {para}
-                </p>
-              );
-            })}
-          </div>
+          <TableOfContents headings={headings} />
 
-          <div className="mt-16 bg-accent/10 border border-accent/20 rounded-2xl p-8 text-center">
-            <h3 className="font-display font-bold text-2xl text-text mb-2">
-              Need help with your business software?
-            </h3>
-            <p className="text-muted mb-6">
-              Let&apos;s discuss your requirements.
-            </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold rounded-xl transition-colors duration-200"
-            >
-              Get In Touch
-            </Link>
-          </div>
+          <div
+            className="article-content"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+
+          <ScrollToHash />
+
+          {!hasCta && (
+            <div className="mt-16 bg-accent/10 border border-accent/20 rounded-2xl p-8 text-center">
+              <h3 className="font-display font-bold text-2xl text-text mb-2">
+                Need help with your business software?
+              </h3>
+              <p className="text-muted mb-6">
+                Let&apos;s discuss your requirements.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold rounded-xl transition-colors duration-200"
+              >
+                Get In Touch
+              </Link>
+            </div>
+          )}
+
+          <AboutMeCard />
+
+          <RelatedCarousel
+            heading="More articles from me"
+            viewAllHref="/blog"
+            items={moreArticles.map((p) => ({
+              href: `/blog/${p.slug}`,
+              title: p.title,
+              excerpt: p.excerpt,
+              tag: p.category,
+            }))}
+          />
 
         </div>
       </main>

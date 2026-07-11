@@ -1,6 +1,9 @@
-import { testimonials } from "@/data/testimonials";
+import { getTestimonials } from "@/lib/api";
 
-export default function TestimonialsSection() {
+export default async function TestimonialsSection() {
+  const testimonials = await getTestimonials();
+  if (testimonials.length === 0) return null;
+
   return (
     <section className="py-24 bg-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,7 +21,7 @@ export default function TestimonialsSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((t) => (
             <div
-              key={t.name}
+              key={t.id}
               className="bg-surface border border-border rounded-2xl p-6 flex flex-col hover:border-accent/30 transition-colors duration-300"
             >
               {/* Quote mark */}

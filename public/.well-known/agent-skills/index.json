@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "custom-business-software",
+      "type": "skill-md",
+      "description": "Bespoke web business software (customer portals, booking platforms, multi-user apps) built with ASP.NET Core / .NET MVC and Next.js.",
+      "url": "/.well-known/agent-skills/custom-business-software/SKILL.md",
+      "digest": "sha256:ff4f10b439ae2739ac103c37deda13ac3643939aadca2b6b67bde2f95be45c41"
+    },
+    {
+      "name": "management-systems",
+      "type": "skill-md",
+      "description": "Industry-specific management platforms — clinic, dental, school, retail-inventory — built with ASP.NET Core / .NET MVC, Web API, and SQL Server.",
+      "url": "/.well-known/agent-skills/management-systems/SKILL.md",
+      "digest": "sha256:b5408e2daec93f346acae14730a3cc77a3407513c7d6617ae9f1ed3cf402df6e"
+    },
+    {
+      "name": "admin-dashboards",
+      "type": "skill-md",
+      "description": "Internal operational dashboards with role-based access, built with Next.js/React and a .NET API backed by PostgreSQL.",
+      "url": "/.well-known/agent-skills/admin-dashboards/SKILL.md",
+      "digest": "sha256:297e5405983fb05cc29769343d5a16625686dc045116f46aa2567feca3e2ad7e"
+    },
+    {
+      "name": "api-integrations",
+      "type": "skill-md",
+      "description": "Secure REST API integrations — payment gateways (Stripe, JazzCash, EasyPaisa, PayPal), CRMs, and third-party services — with webhooks and JWT auth.",
+      "url": "/.well-known/agent-skills/api-integrations/SKILL.md",
+      "digest": "sha256:f6d807e57a629153325f838a84aebd03ca5f49a0249e532cfffe2e80a50e27aa"
+    },
+    {
+      "name": "ai-powered-features",
+      "type": "skill-md",
+      "description": "Embedding LLM APIs (OpenAI, Claude) into existing .NET and Next.js applications as production features — document processing, workflow assistants, automated decisions.",
+      "url": "/.well-known/agent-skills/ai-powered-features/SKILL.md",
+      "digest": "sha256:8c7f05bd3f5daa1a27239c837aa02d8b095d7db299b55c66c35a6d37dbd0ccac"
+    },
+    {
+      "name": "ecommerce-solutions",
+      "type": "skill-md",
+      "description": "Custom-built online stores and multi-vendor marketplaces — ground-up platform development with Next.js, .NET Web API, PostgreSQL, and Stripe.",
+      "url": "/.well-known/agent-skills/ecommerce-solutions/SKILL.md",
+      "digest": "sha256:cf7ca53b78fa0913ef58d4bd2d5ec827f86a33d982146cb7152921ff6621292a"
+    }
+  ]
+}

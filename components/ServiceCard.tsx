@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Service } from "@/data/services";
+import type { Service } from "@/lib/api";
 
 export const serviceIcons: Record<string, React.ReactNode> = {
   "custom-business-software": (
@@ -35,7 +35,7 @@ export const serviceIcons: Record<string, React.ReactNode> = {
 };
 
 export function ServiceCard({ service }: { service: Service }) {
-  const icon = serviceIcons[service.id];
+  const icon = serviceIcons[service.slug];
   return (
     <div className="group bg-surface border border-border rounded-2xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/8 hover:border-accent/30">
       <div className="flex items-center gap-3 mb-3">
@@ -63,7 +63,7 @@ export function ServiceCard({ service }: { service: Service }) {
           </span>
         ))}
       </div>
-      <Link href={`/services/${service.id}`} className="inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:gap-2 transition-all duration-200">
+      <Link href={`/services/${service.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:gap-2 transition-all duration-200">
         Learn More
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -74,7 +74,7 @@ export function ServiceCard({ service }: { service: Service }) {
 }
 
 export function FeaturedServiceCard({ service }: { service: Service }) {
-  const icon = serviceIcons[service.id];
+  const icon = serviceIcons[service.slug];
   return (
     <div className="group relative bg-gradient-to-br from-accent/[0.08] via-accent/[0.04] to-transparent border-2 border-accent/25 rounded-2xl p-6 flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/15 hover:border-accent/50">
       <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
@@ -106,7 +106,7 @@ export function FeaturedServiceCard({ service }: { service: Service }) {
           </span>
         ))}
       </div>
-      <Link href={`/services/${service.id}`} className="relative inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:gap-2 transition-all duration-200">
+      <Link href={`/services/${service.slug}`} className="relative inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:gap-2 transition-all duration-200">
         Learn More
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />

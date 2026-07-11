@@ -13,8 +13,8 @@
   --color-text: #0F172A;
   --color-muted: #64748B;
 
-  --font-display: var(--font-manrope), 'Manrope', sans-serif;
-  --font-body: var(--font-inter), 'Inter', sans-serif;
+  --font-display: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+  --font-body: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
 }
 
 :root {
@@ -78,4 +78,94 @@ h1, h2, h3, h4, h5, h6 {
     linear-gradient(rgba(99, 102, 241, 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
   background-size: 60px 60px;
+}
+
+.article-content {
+  color: var(--color-muted);
+  line-height: 1.75;
+}
+
+.article-content > * + * {
+  margin-top: 1.25em;
+}
+
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  scroll-margin-top: 6rem;
+}
+
+.article-content h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-top: 2em;
+  margin-bottom: 0.25em;
+}
+
+.article-content h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-text);
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
+}
+
+.article-content h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  margin-top: 1.25em;
+  margin-bottom: 0.25em;
+}
+
+.article-content p {
+  margin-top: 1em;
+}
+
+.article-content strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.article-content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.article-content ul,
+.article-content ol {
+  padding-left: 1.5em;
+}
+
+.article-content ul {
+  list-style: disc;
+}
+
+.article-content ol {
+  list-style: decimal;
+}
+
+.article-content li + li {
+  margin-top: 0.4em;
+}
+
+.article-content blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1em;
+  font-style: italic;
+  color: var(--color-text);
+}
+
+.article-content .cta-embed p {
+  margin-top: 0;
+}
+
+.article-content .cta-embed a {
+  color: #fff;
+  text-decoration: none;
 }

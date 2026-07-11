@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { projects, type Project } from "@/data/projects";
+import type { Project } from "@/lib/api";
 
 const industryColors: Record<string, string> = {
   Healthcare: "#10B981",
@@ -12,7 +12,7 @@ const industryColors: Record<string, string> = {
   Education: "#8B5CF6",
 };
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ projects }: { projects: Project[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const drag = useRef({ active: false, startX: 0, scrollLeft: 0 });
@@ -241,7 +241,7 @@ function ProjectCard({ project }: { project: Project }) {
       {/* Screenshot area */}
       <div className="relative h-44 flex-shrink-0 overflow-hidden bg-surface">
         <Image
-          src="/profile.png"
+          src={project.image}
           alt={project.title}
           fill
           className="object-cover object-top"

@@ -1,5 +1,16 @@
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: "http", hostname: "localhost", port: "5081", pathname: "/uploads/**" },
+      { protocol: "https", hostname: "**.kamrandeveloper.com", pathname: "/uploads/**" },
+    ],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
   async redirects() {
     return [
       // Force non-www → www

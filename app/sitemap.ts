@@ -1,9 +1,15 @@
 import type { MetadataRoute } from "next";
 import { BASE_URL } from "@/lib/seo";
-import { projects } from "@/data/projects";
-import { blogPosts } from "@/data/blog";
+import { getBlogPosts, getServices, getCaseStudies, getProjects } from "@/lib/api";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [blogPosts, services, caseStudies, projects] = await Promise.all([
+    getBlogPosts(),
+    getServices(),
+    getCaseStudies(),
+    getProjects(),
+  ]);
+
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
@@ -16,14 +22,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
     url: `${BASE_URL}/projects/${p.slug}`,
-    lastModified: new Date(),
+    lastModified: new Date(p.updatedAt),
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
-  const caseStudyRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
-    url: `${BASE_URL}/case-studies/${p.slug}`,
-    lastModified: new Date(),
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((s) => ({
+    url: `${BASE_URL}/services/${s.slug}`,
+    lastModified: new Date(s.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const caseStudyRoutes: MetadataRoute.Sitemap = caseStudies.map((c) => ({
+    url: `${BASE_URL}/case-studies/${c.slug}`,
+    lastModified: new Date(c.updatedAt),
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
@@ -35,5 +48,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...projectRoutes, ...caseStudyRoutes, ...blogRoutes];
+  return [...staticRoutes, ...projectRoutes, ...serviceRoutes, ...caseStudyRoutes, ...blogRoutes];
 }

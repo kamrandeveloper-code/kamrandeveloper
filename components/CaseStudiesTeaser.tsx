@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { projects } from "@/data/projects";
+import { getCaseStudies } from "@/lib/api";
 
-export default function CaseStudiesTeaser() {
-  const featured = projects.filter((p) => p.featured).slice(0, 3);
+export default async function CaseStudiesTeaser() {
+  const caseStudies = await getCaseStudies();
+  const featured = caseStudies.filter((c) => c.featured).slice(0, 3);
 
   return (
     <section className="py-24 bg-bg relative overflow-hidden">

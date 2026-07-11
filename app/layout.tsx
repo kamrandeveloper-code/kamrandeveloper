@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import { Manrope, Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 
-const manrope = Manrope({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-manrope",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 import Footer from "@/components/Footer";
@@ -27,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full ${manrope.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`h-full ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-bg text-text antialiased">
         <script
           type="application/ld+json"

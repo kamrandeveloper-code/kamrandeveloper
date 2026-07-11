@@ -9,7 +9,7 @@ export function personSchema() {
     description:
       "Full Stack Software Developer specializing in custom business software, management systems, API integrations and modern web applications.",
     url: SITE_URL,
-    email: "nkamran045@email.com",
+    email: "info@kamrandeveloper.com",
     image: `${SITE_URL}/profile.jpeg`,
     address: {
       "@type": "PostalAddress",

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { projects } from "@/data/projects";
+import { getCaseStudies } from "@/lib/api";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/schema";
 
@@ -17,7 +17,8 @@ export const metadata: Metadata = baseMetadata({
   },
 });
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
+  const caseStudies = await getCaseStudies();
   const breadcrumb = breadcrumbSchema([
     { name: "Home", url: BASE_URL },
     { name: "Case Studies", url: `${BASE_URL}/case-studies` },
@@ -43,10 +44,10 @@ export default function CaseStudiesPage() {
 
         {/* Case Studies List */}
         <div className="flex flex-col gap-6">
-          {projects.map((project) => (
+          {caseStudies.map((caseStudy) => (
             <Link
-              key={project.slug}
-              href={`/case-studies/${project.slug}`}
+              key={caseStudy.slug}
+              href={`/case-studies/${caseStudy.slug}`}
               className="group block bg-surface border border-border rounded-2xl p-6 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
             >
               <div className="flex flex-col lg:flex-row lg:items-start gap-6">
@@ -54,26 +55,26 @@ export default function CaseStudiesPage() {
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-3 mb-4">
                     <span className="text-xs font-bold tracking-widest uppercase text-teal bg-teal/10 px-3 py-1 rounded-full">
-                      {project.industry}
+                      {caseStudy.industry}
                     </span>
-                    <span className="text-xs font-medium text-muted">{project.category}</span>
+                    <span className="text-xs font-medium text-muted">{caseStudy.category}</span>
                   </div>
                   <h2 className="font-display font-bold text-text text-2xl mb-3 group-hover:text-accent transition-colors duration-200 leading-snug">
-                    {project.title}
+                    {caseStudy.title}
                   </h2>
-                  <p className="text-muted text-sm leading-relaxed mb-4">{project.description}</p>
+                  <p className="text-muted text-sm leading-relaxed mb-4">{caseStudy.description}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                     <div className="bg-bg border border-border rounded-xl p-3">
                       <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-1">Problem</p>
-                      <p className="text-text text-sm">{project.problem}</p>
+                      <p className="text-text text-sm">{caseStudy.problem}</p>
                     </div>
                     <div className="bg-accent/5 border border-accent/20 rounded-xl p-3">
                       <p className="text-xs font-semibold text-accent uppercase tracking-wide mb-1">Result</p>
-                      <p className="text-text text-sm">{project.result}</p>
+                      <p className="text-text text-sm">{caseStudy.result}</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-5">
-                    {project.tech.map((tech) => (
+                    {caseStudy.tech.map((tech) => (
                       <span key={tech} className="text-[10px] font-semibold uppercase px-2 py-0.5 bg-bg border border-border rounded-full text-muted/70">
                         {tech}
                       </span>
@@ -90,6 +91,9 @@ export default function CaseStudiesPage() {
               </div>
             </Link>
           ))}
+          {caseStudies.length === 0 && (
+            <p className="text-muted text-sm">No case studies published yet.</p>
+          )}
         </div>
 
       </div>

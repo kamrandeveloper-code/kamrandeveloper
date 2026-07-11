@@ -3,7 +3,7 @@ export const developer = {
   title: "Custom Software Developer for Businesses",
   tagline:
     "I build management systems, business software, API integrations, automation tools, and modern web applications that help organizations save time and operate more efficiently.",
-  email: "nkamran045@email.com",
+  email: "info@kamrandeveloper.com",
   phone: "+9220867157",
   location: "Pakistan",
   available: true,

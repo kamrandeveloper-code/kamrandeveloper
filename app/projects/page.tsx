@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { projects } from "@/data/projects";
+import { getProjects } from "@/lib/api";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/schema";
 
@@ -25,7 +25,8 @@ const industryColors: Record<string, string> = {
   Education: "#8B5CF6",
 };
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getProjects();
   const industries = Array.from(new Set(projects.map((p) => p.industry)));
   const breadcrumb = breadcrumbSchema([
     { name: "Home", url: BASE_URL },
@@ -101,7 +102,7 @@ export default function ProjectsPage() {
                 {/* Screenshot area */}
                 <div className="relative h-48 overflow-hidden bg-surface">
                   <Image
-                    src="/profile.png"
+                    src={project.image}
                     alt={project.title}
                     fill
                     className="object-cover object-top"

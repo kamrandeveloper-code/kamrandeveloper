@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { services } from "@/data/services";
-import { ServiceCard, FeaturedServiceCard, serviceIcons } from "@/components/ServiceCard";
+import { getService, getServices } from "@/lib/api";
+import { serviceIcons } from "@/components/ServiceCard";
 import { serviceSchema, breadcrumbSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL } from "@/lib/seo";
+import AboutMeCard from "@/components/AboutMeCard";
+import RelatedCarousel from "@/components/RelatedCarousel";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return services.map((s) => ({ slug: s.id }));
+  const services = await getServices();
+  return services.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const service = services.find((s) => s.id === slug);
+  const service = await getService(slug);
   if (!service) return {};
   return baseMetadata({
     title: `${service.title} — Services`,
@@ -32,16 +35,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const service = services.find((s) => s.id === slug);
+  const service = await getService(slug);
   if (!service) notFound();
 
-  const related = services.filter((s) => s.id !== slug).slice(0, 3);
-  const icon = serviceIcons[service.id];
+  const allServices = await getServices();
+  const related = allServices.filter((s) => s.slug !== slug).slice(0, 3);
+  const icon = serviceIcons[service.slug];
 
   const breadcrumb = breadcrumbSchema([
     { name: "Home", url: BASE_URL },
     { name: "Services", url: `${BASE_URL}/services` },
-    { name: service.title, url: `${BASE_URL}/services/${service.id}` },
+    { name: service.title, url: `${BASE_URL}/services/${service.slug}` },
   ]);
 
   return (
@@ -194,24 +198,19 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
           </div>
 
+          <AboutMeCard />
+
           {/* ── Related services ── */}
-          <div>
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-text">Other services</h2>
-              <Link href="/services" className="text-sm font-medium text-accent hover:underline">
-                View all →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {related.map((s) =>
-                s.featured ? (
-                  <FeaturedServiceCard key={s.id} service={s} />
-                ) : (
-                  <ServiceCard key={s.id} service={s} />
-                )
-              )}
-            </div>
-          </div>
+          <RelatedCarousel
+            heading="Other services"
+            viewAllHref="/services"
+            items={related.map((s) => ({
+              href: `/services/${s.slug}`,
+              title: s.title,
+              excerpt: s.description,
+              tag: s.featured ? "AI" : undefined,
+            }))}
+          />
 
         </div>
       </main>

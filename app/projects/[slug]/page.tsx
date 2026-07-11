@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { projects } from "@/data/projects";
+import { getProject, getProjects } from "@/lib/api";
 import { projectSchema, breadcrumbSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 
@@ -10,13 +10,17 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
+
+
+
+export async function generateStaticParams() {
+  const projects = await getProjects();
   return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   if (!project) return {};
   return baseMetadata({
     title: project.title,
@@ -39,10 +43,11 @@ const industryColors: Record<string, string> = {
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   if (!project) notFound();
 
-  const related = projects.filter((p) => p.slug !== slug).slice(0, 3);
+  const allProjects = await getProjects();
+  const related = allProjects.filter((p) => p.slug !== slug).slice(0, 3);
   const color = industryColors[project.industry] ?? "var(--color-accent)";
 
   const schema = projectSchema({ title: project.title, description: project.description, technologies: project.tech });
@@ -128,7 +133,7 @@ export default async function ProjectPage({ params }: Props) {
             {/* Right: project image */}
             <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-border shadow-2xl shadow-black/10">
               <Image
-                src="/profile.webp"
+                src={project.image}
                 alt={project.title}
                 fill
                 className="object-cover object-center"
@@ -333,7 +338,7 @@ export default async function ProjectPage({ params }: Props) {
                   >
                     <div className="relative h-36 overflow-hidden bg-surface">
                       <Image
-                        src="/profile.png"
+                        src={rel.image}
                         alt={rel.title}
                         fill
                         className="object-cover object-top"
