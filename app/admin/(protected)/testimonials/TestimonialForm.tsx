@@ -61,6 +61,18 @@ export default function TestimonialForm({ action, testimonial }: Props) {
         />
       </div>
 
+      <div>
+        <label className="block text-sm font-medium text-text mb-1.5">
+          Quick Summary <span className="text-muted font-normal">(optional, short internal note — not required for display)</span>
+        </label>
+        <textarea
+          name="quickSummary"
+          defaultValue={testimonial?.quickSummary ?? ""}
+          rows={2}
+          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+        />
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-text mb-1.5">

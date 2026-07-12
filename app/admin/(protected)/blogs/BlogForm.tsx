@@ -4,6 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 import type { BlogPost } from "@/lib/api";
 import type { ActionState } from "@/lib/actions/blogs";
 import BlogContentEditor from "./BlogContentEditor";
+import FaqRepeater from "../FaqRepeater";
 
 interface Props {
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -99,6 +100,19 @@ export default function BlogForm({ action, post }: Props) {
         />
       </div>
 
+      <div>
+        <label className="block text-sm font-medium text-text mb-1.5">
+          Quick Summary <span className="text-muted font-normal">(optional — shown as a TL;DR box if filled in)</span>
+        </label>
+        <textarea
+          name="quickSummary"
+          defaultValue={post?.quickSummary ?? ""}
+          placeholder="A one or two sentence takeaway readers can skim before the full article…"
+          rows={2}
+          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+        />
+      </div>
+
       <BlogContentEditor defaultValue={post?.content} />
 
       <div>
@@ -128,6 +142,8 @@ export default function BlogForm({ action, post }: Props) {
           className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
         />
       </div>
+
+      <FaqRepeater defaultValue={post?.faqs} />
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">Sort Order</label>

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import type { Project } from "@/lib/api";
 import type { ActionState } from "@/lib/actions/projects";
+import FaqRepeater from "../FaqRepeater";
 
 interface Props {
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -69,6 +70,18 @@ export default function ProjectForm({ action, project }: Props) {
           defaultValue={project?.description}
           rows={2}
           required
+          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-text mb-1.5">
+          Quick Summary <span className="text-muted font-normal">(optional — shown as a highlighted callout if filled in)</span>
+        </label>
+        <textarea
+          name="quickSummary"
+          defaultValue={project?.quickSummary ?? ""}
+          rows={2}
           className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
         />
       </div>
@@ -161,6 +174,8 @@ export default function ProjectForm({ action, project }: Props) {
           className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
         />
       </div>
+
+      <FaqRepeater defaultValue={project?.faqs} />
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">Project image</label>

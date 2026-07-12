@@ -1,6 +1,11 @@
 const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5081";
 const REVALIDATE_SECONDS = 60;
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface BlogPost {
   id: number;
   slug: string;
@@ -11,6 +16,8 @@ export interface BlogPost {
   content: string;
   featuredImage: string | null;
   tags: string[];
+  quickSummary?: string | null;
+  faqs: FaqItem[];
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -39,6 +46,8 @@ export interface Service {
   idealFor: string[];
   engagement: EngagementInfo;
   technologies: string[];
+  quickSummary?: string | null;
+  faqs: FaqItem[];
   featured: boolean;
   sortOrder: number;
   createdAt: string;
@@ -69,6 +78,8 @@ export interface CaseStudy {
   featured: boolean;
   content: string;
   demo?: DemoInfo | null;
+  quickSummary?: string | null;
+  faqs: FaqItem[];
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -92,6 +103,8 @@ export interface Project {
   featured: boolean;
   blogPost: string;
   demo?: DemoInfo | null;
+  quickSummary?: string | null;
+  faqs: FaqItem[];
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -104,6 +117,16 @@ export interface Testimonial {
   company: string;
   text: string;
   initials: string;
+  quickSummary?: string | null;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SiteFaq {
+  id: number;
+  question: string;
+  answer: string;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -156,4 +179,8 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProject(slug: string): Promise<Project | null> {
   return apiFetch<Project>(`/api/projects/slug/${encodeURIComponent(slug)}`);
+}
+
+export async function getFaqs(): Promise<SiteFaq[]> {
+  return (await apiFetch<SiteFaq[]>("/api/sitefaqs")) ?? [];
 }

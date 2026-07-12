@@ -169,3 +169,46 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   text-decoration: none;
 }
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+
+.article-content video {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  background: #000;
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2em 0;
+}
+
+.article-content mark {
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  color: inherit;
+  border-radius: 0.2em;
+  padding: 0.05em 0.2em;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.article-content th {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-weight: 600;
+}

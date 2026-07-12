@@ -3,10 +3,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { getCaseStudies, getCaseStudy } from "@/lib/api";
-import { articleSchema, breadcrumbSchema } from "@/lib/schema";
+import { articleSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
+import FaqAccordion from "@/components/FaqAccordion";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -37,6 +38,7 @@ export default async function CaseStudyPage({ params }: Props) {
   const { slug } = await params;
   const project = await getCaseStudy(slug);
   if (!project) notFound();
+  project.faqs = project.faqs ?? [];
 
   const schema = articleSchema({
     title: `${project.title} — Case Study`,
@@ -70,6 +72,9 @@ export default async function CaseStudyPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
+      {project.faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(project.faqs)) }} />
+      )}
       <main className="min-h-screen bg-bg pt-24 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -97,6 +102,14 @@ export default async function CaseStudyPage({ params }: Props) {
             </h1>
             <p className="text-muted text-xl leading-relaxed">{project.description}</p>
           </div>
+
+          {/* Quick Summary */}
+          {project.quickSummary && (
+            <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mb-10">
+              <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Quick Summary</p>
+              <p className="text-text text-sm leading-relaxed">{project.quickSummary}</p>
+            </div>
+          )}
 
           {/* Cover image */}
           {project.imageUrl && (
@@ -189,6 +202,14 @@ export default async function CaseStudyPage({ params }: Props) {
               ))}
             </div>
           </div>
+
+          {/* FAQ */}
+          {project.faqs.length > 0 && (
+            <div className="mb-10">
+              <h2 className="font-display font-bold text-2xl text-text mb-6">Frequently asked questions</h2>
+              <FaqAccordion items={project.faqs} />
+            </div>
+          )}
 
           {/* Bottom CTA */}
           <div className="bg-accent/10 border border-accent/20 rounded-2xl p-8 text-center">

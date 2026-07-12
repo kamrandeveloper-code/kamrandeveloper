@@ -34,6 +34,10 @@ export default async function TestimonialsSection() {
                 {t.text}
               </p>
 
+              {t.quickSummary && (
+                <p className="text-muted/70 text-xs italic mb-4">{t.quickSummary}</p>
+              )}
+
               {/* Author */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center flex-shrink-0">

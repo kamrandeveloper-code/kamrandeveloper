@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminFetch } from "@/lib/admin-auth";
-import { linesToArray } from "@/lib/actions/shared";
+import { linesToArray, formDataToFaqs } from "@/lib/actions/shared";
 import { resolveImageUrl } from "@/lib/actions/image-upload";
 
 export interface ActionState {
@@ -20,6 +20,7 @@ function buildDemo(formData: FormData) {
 
 async function buildPayload(formData: FormData) {
   const architecture = String(formData.get("architecture") ?? "").trim();
+  const quickSummary = String(formData.get("quickSummary") ?? "").trim();
   return {
     slug: String(formData.get("slug") ?? ""),
     title: String(formData.get("title") ?? ""),
@@ -37,6 +38,8 @@ async function buildPayload(formData: FormData) {
     featured: formData.get("featured") === "on",
     content: String(formData.get("content") ?? ""),
     demo: buildDemo(formData),
+    quickSummary: quickSummary.length > 0 ? quickSummary : null,
+    faqs: formDataToFaqs(formData),
     sortOrder: Number(formData.get("sortOrder") ?? 0),
   };
 }

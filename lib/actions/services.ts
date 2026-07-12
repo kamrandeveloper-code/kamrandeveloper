@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminFetch } from "@/lib/admin-auth";
-import { linesToArray, linesToProcessSteps } from "@/lib/actions/shared";
+import { linesToArray, linesToProcessSteps, formDataToFaqs } from "@/lib/actions/shared";
 
 export interface ActionState {
   error?: string;
@@ -25,6 +25,8 @@ function buildPayload(formData: FormData) {
       note: String(formData.get("engagementNote") ?? ""),
     },
     technologies: linesToArray(formData.get("technologies")),
+    quickSummary: String(formData.get("quickSummary") ?? "").trim() || null,
+    faqs: formDataToFaqs(formData),
     featured: formData.get("featured") === "on",
     sortOrder: Number(formData.get("sortOrder") ?? 0),
   };

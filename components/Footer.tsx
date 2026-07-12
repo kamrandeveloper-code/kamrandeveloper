@@ -180,6 +180,17 @@ export default function Footer() {
                 Twitter / X
               </a>
               <a
+                href={developer.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 text-sm text-muted hover:text-accent transition-colors group"
+              >
+                <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M22.675 0h-21.35C.6 0 0 .6 0 1.326v21.348C0 23.4.6 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.464.099 2.796.143v3.24l-1.92.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.674V1.325C24 .6 23.4 0 22.675 0z" />
+                </svg>
+                Facebook
+              </a>
+              <a
                 href={`mailto:${developer.email}`}
                 className="flex items-center gap-2.5 text-sm text-muted hover:text-accent transition-colors group"
               >

@@ -25,3 +25,15 @@ export function linesToProcessSteps(value: FormDataEntryValue | null): { step: s
 export function processStepsToLines(steps: { step: string; detail: string }[]): string {
   return steps.map((s) => `${s.step} :: ${s.detail}`).join("\n");
 }
+
+/**
+ * Reads the repeated "faqQuestion"/"faqAnswer" fields produced by the
+ * FaqRepeater admin component and zips them by position into pairs.
+ */
+export function formDataToFaqs(formData: FormData): { question: string; answer: string }[] {
+  const questions = formData.getAll("faqQuestion").map(String);
+  const answers = formData.getAll("faqAnswer").map(String);
+  return questions
+    .map((question, i) => ({ question: question.trim(), answer: (answers[i] ?? "").trim() }))
+    .filter((f) => f.question || f.answer);
+}

@@ -6,6 +6,9 @@ import TurndownService from "turndown";
 import RichTextEditor from "./RichTextEditor";
 
 const turndown = new TurndownService({ headingStyle: "atx" });
+// Markdown has no native representation for these — keep them as raw HTML
+// blocks so switching to Markdown mode and back doesn't destroy them.
+turndown.keep(["video", "table"]);
 
 interface Props {
   defaultValue?: string;

@@ -15,5 +15,6 @@ export const developer = {
     github: process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com",
     linkedin: process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "https://linkedin.com",
     twitter: process.env.NEXT_PUBLIC_TWITTER_URL ?? "https://twitter.com",
+    facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL ?? "https://facebook.com",
   },
 };

@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { marked } from "marked";
 import { getBlogPost, getBlogPosts, getProject, getProjects, type BlogPost, type Project } from "@/lib/api";
-import { articleSchema, breadcrumbSchema } from "@/lib/schema";
+import { articleSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 import { injectHeadingIds } from "@/lib/toc";
 import { injectCtaCard } from "@/lib/embeds";
@@ -11,6 +11,7 @@ import TableOfContents from "@/components/TableOfContents";
 import ScrollToHash from "@/components/ScrollToHash";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
+import FaqAccordion from "@/components/FaqAccordion";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -68,6 +69,7 @@ export default async function BlogPostPage({ params }: Props) {
 }
 
 async function ArticlePage({ post }: { post: BlogPost }) {
+  post.faqs = post.faqs ?? [];
   const rawHtml = marked.parse(post.content, { async: false }) as string;
   const { html: htmlWithHeadingIds, headings } = injectHeadingIds(rawHtml);
   const { html, hasCta } = injectCtaCard(htmlWithHeadingIds);
@@ -93,6 +95,9 @@ async function ArticlePage({ post }: { post: BlogPost }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      {post.faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(post.faqs)) }} />
+      )}
       <main className="min-h-screen bg-bg pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -128,6 +133,13 @@ async function ArticlePage({ post }: { post: BlogPost }) {
             <p className="text-muted text-xl leading-relaxed">{post.excerpt}</p>
           </div>
 
+          {post.quickSummary && (
+            <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mb-10">
+              <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Quick Summary</p>
+              <p className="text-text text-sm leading-relaxed">{post.quickSummary}</p>
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-1.5 mb-10">
             {post.tags.map((tag) => (
               <span key={tag} className="text-xs font-medium px-2.5 py-1 bg-surface border border-border rounded-full text-muted/70">
@@ -162,6 +174,13 @@ async function ArticlePage({ post }: { post: BlogPost }) {
             </div>
           )}
 
+          {post.faqs.length > 0 && (
+            <div className="mt-16 mb-16">
+              <h2 className="font-display font-bold text-2xl text-text mb-6">Frequently asked questions</h2>
+              <FaqAccordion items={post.faqs} />
+            </div>
+          )}
+
           <AboutMeCard />
 
           <RelatedCarousel
@@ -182,6 +201,7 @@ async function ArticlePage({ post }: { post: BlogPost }) {
 }
 
 function ProjectCaseStudyPage({ project }: { project: Project }) {
+  project.faqs = project.faqs ?? [];
   const schema = articleSchema({
     title: `${project.title} — Case Study`,
     description: project.description,
@@ -206,6 +226,9 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      {project.faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(project.faqs)) }} />
+      )}
       <main className="min-h-screen bg-bg pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -231,6 +254,13 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
             </h1>
             <p className="text-muted text-xl leading-relaxed">{project.description}</p>
           </div>
+
+          {project.quickSummary && (
+            <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mb-10">
+              <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Quick Summary</p>
+              <p className="text-text text-sm leading-relaxed">{project.quickSummary}</p>
+            </div>
+          )}
 
           <div className="bg-surface border border-border rounded-2xl p-6 mb-10">
             <div className="flex flex-wrap gap-2">
@@ -265,6 +295,13 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
               );
             })}
           </div>
+
+          {project.faqs.length > 0 && (
+            <div className="mb-16">
+              <h2 className="font-display font-bold text-2xl text-text mb-6">Frequently asked questions</h2>
+              <FaqAccordion items={project.faqs} />
+            </div>
+          )}
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link

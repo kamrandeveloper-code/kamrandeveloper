@@ -3,10 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getService, getServices } from "@/lib/api";
 import { serviceIcons } from "@/components/ServiceCard";
-import { serviceSchema, breadcrumbSchema } from "@/lib/schema";
+import { serviceSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL } from "@/lib/seo";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
+import FaqAccordion from "@/components/FaqAccordion";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -37,6 +38,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) notFound();
+  service.faqs = service.faqs ?? [];
 
   const allServices = await getServices();
   const related = allServices.filter((s) => s.slug !== slug).slice(0, 3);
@@ -55,6 +57,9 @@ export default async function ServiceDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema({ title: service.title, description: service.description })) }}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      {service.faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(service.faqs)) }} />
+      )}
 
       <main className="min-h-screen bg-bg pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,6 +90,12 @@ export default async function ServiceDetailPage({ params }: Props) {
             <p className="text-muted text-lg leading-relaxed max-w-2xl">
               {service.tagline}
             </p>
+            {service.quickSummary && (
+              <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mt-6 max-w-2xl">
+                <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Quick Summary</p>
+                <p className="text-text text-sm leading-relaxed">{service.quickSummary}</p>
+              </div>
+            )}
           </div>
 
           {/* ── Main content ── */}
@@ -158,6 +169,14 @@ export default async function ServiceDetailPage({ params }: Props) {
                   ))}
                 </div>
               </div>
+
+              {/* FAQ */}
+              {service.faqs.length > 0 && (
+                <div>
+                  <h2 className="font-display font-bold text-xl text-text mb-5">Frequently asked questions</h2>
+                  <FaqAccordion items={service.faqs} />
+                </div>
+              )}
             </div>
 
             {/* Right: sidebar (1/3) */}

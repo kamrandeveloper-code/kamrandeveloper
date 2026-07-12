@@ -1,19 +1,32 @@
 import type { NextConfig } from "next";
+
 const nextConfig: NextConfig = {
   images: {
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
+
     remotePatterns: [
-      { protocol: "http", hostname: "localhost", port: "5081", pathname: "/uploads/**" },
-      { protocol: "https", hostname: "**.kamrandeveloper.com", pathname: "/uploads/**" },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5081",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.kamrandeveloper.com",
+        pathname: "/uploads/**",
+      },
     ],
   },
+
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
     },
   },
+
   async redirects() {
     return [
-      // Force non-www → www
       {
         source: "/:path*",
         has: [
@@ -25,8 +38,6 @@ const nextConfig: NextConfig = {
         destination: "https://www.kamrandeveloper.com/:path*",
         permanent: true,
       },
-
-      // Force http → https (www)
       {
         source: "/:path*",
         has: [
@@ -46,4 +57,5 @@ const nextConfig: NextConfig = {
     ];
   },
 };
+
 export default nextConfig;

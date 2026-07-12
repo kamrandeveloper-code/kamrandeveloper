@@ -3,8 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getProject, getProjects } from "@/lib/api";
-import { projectSchema, breadcrumbSchema } from "@/lib/schema";
+import { projectSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
+import FaqAccordion from "@/components/FaqAccordion";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -45,6 +46,7 @@ export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) notFound();
+  project.faqs = project.faqs ?? [];
 
   const allProjects = await getProjects();
   const related = allProjects.filter((p) => p.slug !== slug).slice(0, 3);
@@ -61,6 +63,9 @@ export default async function ProjectPage({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+      {project.faqs.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(project.faqs)) }} />
+      )}
 
       <main className="min-h-screen bg-bg pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,6 +108,13 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-muted text-base sm:text-lg leading-relaxed mb-8">
                 {project.longDescription}
               </p>
+
+              {project.quickSummary && (
+                <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mb-8">
+                  <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Quick Summary</p>
+                  <p className="text-text text-sm leading-relaxed">{project.quickSummary}</p>
+                </div>
+              )}
 
               <div className="flex flex-wrap gap-3">
                 <Link
@@ -318,6 +330,16 @@ export default async function ProjectPage({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {/* ── FAQ ── */}
+          {project.faqs.length > 0 && (
+            <div className="mb-20">
+              <h2 className="font-display font-bold text-2xl sm:text-3xl text-text mb-8">Frequently asked questions</h2>
+              <div className="max-w-3xl">
+                <FaqAccordion items={project.faqs} />
+              </div>
+            </div>
+          )}
 
           {/* ── Related Projects ── */}
           <div>

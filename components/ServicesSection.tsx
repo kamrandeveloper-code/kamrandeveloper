@@ -7,7 +7,7 @@ export default async function ServicesSection() {
   return (
     <section className="pb-12 bg-bg relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative w-full mb-24 overflow-hidden rounded-3xl min-h-[320px] sm:min-h-[420px] lg:min-h-[500px]">
+        <div className="relative w-full mb-24 overflow-hidden rounded-2xl min-h-[320px] sm:min-h-[420px] lg:min-h-[500px]">
           <video
             className="absolute inset-0 w-full h-full object-cover"
             src="/Custom%20Software%20Need.mp4"
@@ -31,7 +31,7 @@ export default async function ServicesSection() {
             >
               Software that fits how your <span className="text-accent">business actually runs</span>
             </h2>
-            <p className="self-end text-right max-w-xs sm:max-w-sm text-white/85 text-sm sm:text-base leading-relaxed bg-black/30 backdrop-blur-sm rounded-xl px-4 py-3">
+            <p className="hidden sm:flex self-end text-right max-w-xs sm:max-w-sm text-white/85 text-sm sm:text-base leading-relaxed bg-black/10 backdrop-blur-sm rounded-xl px-4 py-3">
               Most businesses reach a point where spreadsheets and off-the-shelf tools stop working.
               I build custom software tailored to your exact operations.
             </p>
