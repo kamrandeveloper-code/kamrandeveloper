@@ -47,27 +47,64 @@ export default function EmailCompose({ onSuccess }: Props) {
 
   return (
     <form ref={formRef} onSubmit={handleSend} className="flex flex-col gap-3">
-      <input
-        type="text"
-        name="from_name"
-        placeholder="Your name"
-        required
-        className="w-full px-3 py-2.5 text-sm rounded-lg border border-border bg-bg text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors"
-      />
-      <input
-        type="email"
-        name="from_email"
-        placeholder="Your email"
-        required
-        className="w-full px-3 py-2.5 text-sm rounded-lg border border-border bg-bg text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors"
-      />
-      <textarea
-        name="message"
-        placeholder="Your message…"
-        required
-        rows={5}
-        className="w-full px-3 py-2.5 text-sm rounded-lg border border-border bg-bg text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors resize-none"
-      />
+      {/* Name */}
+      <div>
+        <label htmlFor="from_name" className="sr-only">Your name</label>
+        <input
+          id="from_name"
+          type="text"
+          name="from_name"
+          placeholder="Your name"
+          required
+          autoComplete="name"
+          aria-required="true"
+          aria-describedby="name-help"
+          className="w-full px-3 py-2.5 text-sm rounded-lg border border-border bg-bg text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors"
+        />
+        <p id="name-help" className="sr-only">Enter your full name so I know who to reply to.</p>
+      </div>
+
+      {/* Email */}
+      <div>
+        <label htmlFor="from_email" className="sr-only">Your email</label>
+        <input
+          id="from_email"
+          type="email"
+          name="from_email"
+          placeholder="Your email"
+          required
+          autoComplete="email"
+          aria-required="true"
+          aria-describedby="email-help"
+          className="w-full px-3 py-2.5 text-sm rounded-lg border border-border bg-bg text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors"
+        />
+        <p id="email-help" className="sr-only">Enter your email address so I can reply to you.</p>
+      </div>
+
+      {/* Message */}
+      <div>
+        <label htmlFor="message" className="sr-only">Your message</label>
+        <textarea
+          id="message"
+          name="message"
+          placeholder="Your message…"
+          required
+          rows={5}
+          autoComplete="off"
+          aria-required="true"
+          aria-describedby="message-help"
+          className="w-full px-3 py-2.5 text-sm rounded-lg border border-border bg-bg text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors resize-none"
+        />
+        <p id="message-help" className="sr-only">Describe your project, challenges, and what you need help with.</p>
+      </div>
+
+      {/* Status region for screen readers */}
+      <div role="status" aria-live="polite" className="sr-only">
+        {status === "sending" && "Sending your message..."}
+        {status === "sent" && "Message sent successfully."}
+        {status === "error" && "Failed to send. Please try again."}
+      </div>
+
       <button
         type="submit"
         disabled={status === "sending" || status === "sent"}

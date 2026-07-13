@@ -18,6 +18,20 @@ export default async function ServicesSection() {
             playsInline
             aria-hidden="true"
           />
+           <noscript>
+            <div
+              className="absolute inset-0 w-full h-full"
+              style={{
+                background: "linear-gradient(135deg, #070A19 0%, #1a1f3a 50%, #070A19 100%)",
+              }}
+            >
+              <img
+                src="/kamran-custom-software-developer.png"
+                alt="Custom software development services"
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
+              />
+            </div>
+          </noscript>
           <div
             className="absolute inset-0"
             style={{

@@ -1,20 +1,24 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
 import Footer from "@/components/Footer";
 import ContactFloat from "@/components/ContactFloat";
 import { EmailPopupProvider } from "@/components/EmailPopupContext";
 import { baseMetadata } from "@/lib/seo";
 import { personSchema, websiteSchema, organizationSchema } from "@/lib/schema";
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
 export const metadata: Metadata = baseMetadata();
+
+export const viewport: Viewport = {
+  themeColor: "#6366F1",
+};
 
 export default function RootLayout({
   children,
@@ -24,6 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-bg text-text antialiased">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent focus:text-white focus:rounded-lg focus:font-semibold"
+        >
+          Skip to main content
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema()) }}
@@ -38,7 +48,9 @@ export default function RootLayout({
         />
         <EmailPopupProvider>
           <Header />
-          <div className="flex-1">{children}</div>
+          <main id="main" tabIndex={-1} className="flex-1">
+            {children}
+          </main>
           <Footer />
           <ContactFloat />
         </EmailPopupProvider>

@@ -19,6 +19,7 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
 
   return {
     metadataBase: new URL(BASE_URL),
+
     title: {
       default: "Kamran — Custom Software Developer for Businesses",
       template: "%s | Kamran",
@@ -74,3 +75,4 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
 }
 
 export { baseMetadata as createMetadata };
+

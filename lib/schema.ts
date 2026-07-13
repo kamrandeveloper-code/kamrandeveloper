@@ -69,6 +69,28 @@ export function organizationSchema() {
   };
 }
 
+export function webpageSchema({
+  url,
+  name,
+  description,
+  significantLink,
+}: {
+  url: string;
+  name: string;
+  description: string;
+  significantLink?: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": url,
+    url,
+    name,
+    description,
+    ...(significantLink && { significantLink }),
+  };
+}
+
 export function breadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
