@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { developer } from "@/data/developer";
+import ContactCTAButton from "@/components/ContactCTAButton";
 import { skillGroups } from "@/data/skills";
 import { experiences } from "@/data/experience";
 import { personSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
@@ -368,15 +369,14 @@ export default function AboutPage() {
               get in touch to discuss the requirements.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/contact"
+              <ContactCTAButton
                 className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold rounded-xl transition-colors duration-200"
               >
                 Get In Touch
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </Link>
+              </ContactCTAButton>
               <Link
                 href="/projects"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium"

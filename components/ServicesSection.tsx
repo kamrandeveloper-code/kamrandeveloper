@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getServices } from "@/lib/api";
 import { ServiceCard, FeaturedServiceCard } from "@/components/ServiceCard";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 export default async function ServicesSection() {
   const services = await getServices();
@@ -60,9 +61,9 @@ export default async function ServicesSection() {
           </Link>
           <span className="text-muted text-sm">
             Not sure what you need?{" "}
-            <Link href="/contact" className="text-accent hover:underline font-medium">
+            <ContactCTAButton className="text-accent hover:underline font-medium">
               Describe the problem
-            </Link>
+            </ContactCTAButton>
             {" "}- I&apos;ll tell you what makes sense.
           </span>
         </div>

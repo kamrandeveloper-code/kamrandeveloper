@@ -12,6 +12,7 @@ import ScrollToHash from "@/components/ScrollToHash";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
 import FaqAccordion from "@/components/FaqAccordion";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -165,12 +166,11 @@ async function ArticlePage({ post }: { post: BlogPost }) {
               <p className="text-muted mb-6">
                 Let&apos;s discuss your requirements.
               </p>
-              <Link
-                href="/contact"
+              <ContactCTAButton
                 className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold rounded-xl transition-colors duration-200"
               >
                 Get In Touch
-              </Link>
+              </ContactCTAButton>
             </div>
           )}
 
@@ -310,12 +310,11 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
             >
               Full Case Study
             </Link>
-            <Link
-              href="/contact"
+            <ContactCTAButton
               className="inline-flex items-center gap-2 px-6 py-3 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium"
             >
               Build something similar
-            </Link>
+            </ContactCTAButton>
           </div>
 
         </div>

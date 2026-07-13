@@ -5,6 +5,7 @@ import { getServices } from "@/lib/api";
 import { ServiceCard, FeaturedServiceCard } from "@/components/ServiceCard";
 import { serviceSchema, breadcrumbSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL, buildAlternates } from "@/lib/seo";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 export const metadata: Metadata = baseMetadata({
   title: "Software Development Services",
@@ -50,15 +51,14 @@ export default async function ServicesPage() {
                 From management systems to AI-powered tools, I build what your operation actually needs.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
+                <ContactCTAButton
                   className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-lg shadow-accent/20"
                 >
                   Discuss your project
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </Link>
+                </ContactCTAButton>
                 <Link
                   href="/projects"
                   className="inline-flex items-center gap-2 px-6 py-3 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium"
@@ -109,15 +109,14 @@ export default async function ServicesPage() {
                 Describe your business problem and I&apos;ll tell you what makes sense to build.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href="/contact"
+                <ContactCTAButton
                   className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-white/90 text-accent font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-black/10"
                 >
                   Get in touch
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </Link>
+                </ContactCTAButton>
                 <Link
                   href="/projects"
                   className="inline-flex items-center gap-2 px-7 py-3.5 border border-white/30 hover:border-white/60 text-white rounded-xl transition-all duration-200 text-sm font-medium"

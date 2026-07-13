@@ -8,6 +8,7 @@ import { BASE_URL, baseMetadata } from "@/lib/seo";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
 import FaqAccordion from "@/components/FaqAccordion";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -220,12 +221,11 @@ export default async function CaseStudyPage({ params }: Props) {
               I&apos;m available for freelance work. Let&apos;s discuss your requirements.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/contact"
+              <ContactCTAButton
                 className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold rounded-xl transition-colors duration-200"
               >
                 Get In Touch
-              </Link>
+              </ContactCTAButton>
               <Link
                 href="/projects"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium"

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 export default function CTASection() {
   return (
@@ -14,8 +14,7 @@ export default function CTASection() {
           Let&apos;s work together on your next project. I&apos;m currently
           available for freelance work.
         </p>
-        <Link
-          href="/contact"
+        <ContactCTAButton
           className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-white/90 text-accent font-semibold text-lg rounded-xl transition-all duration-200 shadow-xl shadow-black/20"
         >
           Get In Touch
@@ -32,7 +31,7 @@ export default function CTASection() {
               d="M17 8l4 4m0 0l-4 4m4-4H3"
             />
           </svg>
-        </Link>
+        </ContactCTAButton>
       </div>
     </section>
   );

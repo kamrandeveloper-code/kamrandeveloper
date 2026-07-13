@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { developer } from "@/data/developer";
-import EmailPopup from "@/components/EmailPopup";
 import EmailCompose from "@/components/EmailCompose";
+import { useEmailPopup } from "@/components/EmailPopupContext";
 import { breadcrumbSchema } from "@/lib/schema";
 import { BASE_URL } from "@/lib/seo";
 
 export default function ContactPage() {
-  const [emailOpen, setEmailOpen] = useState(false);
+  const { openPopup } = useEmailPopup();
   const breadcrumb = breadcrumbSchema([
     { name: "Home", url: BASE_URL },
     { name: "Contact", url: `${BASE_URL}/contact` },
@@ -18,16 +17,6 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-bg pt-28 pb-24 overflow-x-hidden">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
-
-      {/* Email popup modal */}
-      {emailOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-          onMouseDown={(e) => { if (e.target === e.currentTarget) setEmailOpen(false); }}
-        >
-          <EmailPopup onClose={() => setEmailOpen(false)} />
-        </div>
-      )}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -48,7 +37,7 @@ export default function ContactPage() {
               I&apos;ll recommend the best solution — no jargon, no sales pitch.
             </p>
             <button
-              onClick={() => setEmailOpen(true)}
+              onClick={openPopup}
               className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-lg shadow-accent/20"
             >
               Tell me about your project
@@ -99,7 +88,7 @@ export default function ContactPage() {
 
               {/* Email */}
               <button
-                onClick={() => setEmailOpen(true)}
+                onClick={openPopup}
                 className="w-full flex items-center gap-4 p-5 bg-surface border border-border rounded-2xl hover:border-accent/40 hover:bg-accent/5 transition-all duration-200 group text-left"
               >
                 <div className="w-11 h-11 bg-accent/10 rounded-xl flex items-center justify-center shrink-0">
@@ -237,7 +226,7 @@ export default function ContactPage() {
             </h2>
             <p className="text-white/70 text-sm mb-6">Pick a channel above and send a message — I&apos;ll take it from there.</p>
             <button
-              onClick={() => setEmailOpen(true)}
+              onClick={openPopup}
               className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-white/90 text-accent font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-black/10 text-sm"
             >
               Send a message now

@@ -10,6 +10,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 import Footer from "@/components/Footer";
 import ContactFloat from "@/components/ContactFloat";
+import { EmailPopupProvider } from "@/components/EmailPopupContext";
 import { baseMetadata } from "@/lib/seo";
 import { personSchema, websiteSchema, organizationSchema } from "@/lib/schema";
 
@@ -35,10 +36,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
         />
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
-        <ContactFloat />
+        <EmailPopupProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+          <ContactFloat />
+        </EmailPopupProvider>
       </body>
     </html>
   );

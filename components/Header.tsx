@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { developer } from "@/data/developer";
 import Image from "next/image";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 const navLinks = [
   { label: "About", href: "/about" },
@@ -67,12 +68,11 @@ export default function Header() {
 
           {/* Hire Me + Hamburger */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/contact"
+            <ContactCTAButton
               className="hidden lg:inline-flex items-center px-4 py-2 text-sm font-semibold bg-accent hover:bg-[var(--color-accent-hover)] text-white rounded-lg transition-colors duration-200"
             >
               Hire Me
-            </Link>
+            </ContactCTAButton>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="lg:hidden p-2 text-muted hover:text-text transition-colors"
@@ -110,13 +110,12 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
+            <ContactCTAButton
               onClick={() => setMenuOpen(false)}
               className="mt-2 px-4 py-2.5 text-sm font-semibold bg-accent hover:bg-[var(--color-accent-hover)] text-white rounded-lg transition-colors text-center"
             >
               Hire Me
-            </Link>
+            </ContactCTAButton>
           </div>
         </div>
       )}

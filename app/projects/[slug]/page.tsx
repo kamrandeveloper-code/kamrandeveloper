@@ -6,6 +6,7 @@ import { getProject, getProjects } from "@/lib/api";
 import { projectSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 import FaqAccordion from "@/components/FaqAccordion";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -117,15 +118,14 @@ export default async function ProjectPage({ params }: Props) {
               )}
 
               <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
+                <ContactCTAButton
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-lg shadow-accent/20"
                 >
                   Build something similar
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </Link>
+                </ContactCTAButton>
                 {project.demo && (
                   <a
                     href={project.demo.url}
@@ -320,12 +320,11 @@ export default async function ProjectPage({ params }: Props) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </Link>
-                  <Link
-                    href="/contact"
+                  <ContactCTAButton
                     className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-border hover:border-accent text-muted hover:text-accent text-sm font-medium rounded-xl transition-all duration-200"
                   >
                     Build something similar
-                  </Link>
+                  </ContactCTAButton>
                 </div>
               </div>
             </div>

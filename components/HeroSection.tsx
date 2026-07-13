@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { developer } from "@/data/developer";
+import ContactCTAButton from "@/components/ContactCTAButton";
 
 const socialLinks = [
   {
@@ -123,12 +124,11 @@ export default function HeroSection() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <Link
-                href="/contact"
+              <ContactCTAButton
                 className="inline-flex items-center gap-2 font-semibold rounded-lg transition-all duration-200 text-sm px-6 py-3 border border-accent text-accent hover:bg-accent hover:text-white hover:border-accent"
               >
                 Hire Me
-              </Link>
+              </ContactCTAButton>
             </div>
 
             {/* Social Links */}
