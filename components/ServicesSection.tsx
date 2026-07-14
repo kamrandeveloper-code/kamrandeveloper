@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getServices } from "@/lib/api";
 import { ServiceCard, FeaturedServiceCard } from "@/components/ServiceCard";
 import ContactCTAButton from "@/components/ContactCTAButton";
@@ -25,10 +26,11 @@ export default async function ServicesSection() {
                 background: "linear-gradient(135deg, #070A19 0%, #1a1f3a 50%, #070A19 100%)",
               }}
             >
-              <img
+             <Image
                 src="/kamran-custom-software-developer.png"
                 alt="Custom software development services"
-                className="absolute inset-0 w-full h-full object-cover opacity-30"
+                fill
+                className="object-cover opacity-30"
               />
             </div>
           </noscript>

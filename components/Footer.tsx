@@ -78,7 +78,7 @@ export default function Footer() {
           <div>
             <Link href="/" className="inline-block mb-4">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Kamran Logo"
                 width={180}
                 height={100}

@@ -1,13 +1,7 @@
 import Link from "next/link";
 import { developer } from "@/data/developer";
+import { specializations } from "@/data/specializations";
 
-const specializations = [
-  "Healthcare Software",
-  "Business Automation",
-  "Management Systems",
-  "API Integrations",
-  "E-Commerce Platforms",
-];
 
 export default function AboutSection() {
   return (
@@ -17,10 +11,10 @@ export default function AboutSection() {
 
           <div>
             <p className="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-4">
-              About
+              About {developer.name}
             </p>
             <h2 className="font-display font-bold text-4xl sm:text-5xl text-text leading-tight mb-6">
-              Who is Kamran?
+              Who is {developer.name}?
             </h2>
             <p className="text-muted text-lg leading-relaxed mb-6">
               {developer.bio}
@@ -44,17 +38,27 @@ export default function AboutSection() {
             <h3 className="font-display font-bold text-text text-lg mb-6">
               Specializations
             </h3>
-            <div className="space-y-3">
+           <ul className="space-y-3">
               {specializations.map((spec) => (
-                <div
+                <li
                   key={spec}
-                  className="flex items-center gap-3 p-4 bg-bg border border-border rounded-xl hover:border-accent/30 transition-colors duration-200"
+                  className="flex items-center gap-3 p-4 bg-bg border border-border rounded-xl hover:border-accent/30 transition-colors"
                 >
-                  <div className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
-                  <span className="text-text font-medium text-sm">{spec}</span>
-                </div>
+                  <svg
+                    className="w-2 h-2 text-accent shrink-0"
+                    viewBox="0 0 8 8"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <circle cx="4" cy="4" r="4" />
+                  </svg>
+
+                  <span className="text-text font-medium text-sm">
+                    {spec}
+                  </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
         </div>

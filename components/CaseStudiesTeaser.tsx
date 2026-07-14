@@ -18,6 +18,7 @@ export default async function CaseStudiesTeaser() {
               <span className="text-accent">real business problems</span>
             </h2>
           </div>
+     
           <Link
             href="/case-studies"
             className="inline-flex items-center gap-2 px-5 py-2.5 border border-border hover:border-accent text-muted hover:text-accent rounded-xl transition-all duration-200 text-sm font-medium flex-shrink-0"
@@ -31,27 +32,28 @@ export default async function CaseStudiesTeaser() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {featured.map((project) => (
+                 <article>
             <Link
               key={project.slug}
               href={`/case-studies/${project.slug}`}
-              className="group block bg-surface border border-border rounded-2xl p-6 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
+              className="group block bg-surface border border-border rounded-2xl p-6 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all "
             >
-              <span className="text-xs font-bold tracking-widest uppercase text-teal mb-3 block">
-                {project.industry}
-              </span>
+             <span className="inline-flex items-center rounded-full bg-accent/10 text-accent px-2.5 py-1 text-xs font-semibold">
+  {project.industry}
+</span>
               <h3 className="font-display font-bold text-text text-lg mb-3 group-hover:text-accent transition-colors duration-200 leading-snug">
                 {project.title}
               </h3>
-              <div className="space-y-2 mb-4">
+              <dl className="space-y-2 mb-4">
                 <div>
-                  <span className="text-xs font-semibold text-muted uppercase tracking-wide">Problem: </span>
-                  <span className="text-muted text-sm">{project.problem}</span>
+                  <dt className="text-xs font-semibold text-muted uppercase tracking-wide">Problem: </dt>
+                  <dd className="text-muted text-sm">{project.problem}</dd>
                 </div>
                 <div>
-                  <span className="text-xs font-semibold text-accent uppercase tracking-wide">Result: </span>
-                  <span className="text-muted text-sm">{project.result}</span>
+                  <dt className="text-xs font-semibold text-accent uppercase tracking-wide">Result: </dt>
+                  <dd className="text-muted text-sm">{project.result}</dd>
                 </div>
-              </div>
+              </dl>
               <span className="text-accent font-medium text-sm inline-flex items-center gap-1">
                 Read case study
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,6 +61,7 @@ export default async function CaseStudiesTeaser() {
                 </svg>
               </span>
             </Link>
+            </article>
           ))}
         </div>
       </div>

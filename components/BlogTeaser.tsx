@@ -14,9 +14,16 @@ export default async function BlogTeaser() {
               Blog
             </p>
             <h2 className="font-display font-bold text-4xl sm:text-5xl text-text leading-tight">
-              Articles for{" "}
-              <span className="text-accent">businesses and developers</span>
+              Practical insights on{" "}
+              <span className="text-accent">
+                software, SEO & business growth
+              </span>
             </h2>
+            <p className="mt-5 max-w-2xl text-lg text-muted leading-relaxed">
+              I write about custom software development, Next.js, .NET,
+              SEO, real client projects, and lessons learned while building
+              production applications.
+            </p>
           </div>
           <Link
             href="/blog"
@@ -38,16 +45,61 @@ export default async function BlogTeaser() {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className={`text-xs font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${
-                      post.category === "Business"
-                        ? "bg-accent/10 text-accent"
-                        : "bg-teal/10 text-teal"
-                    }`}>
-                      {post.category}
-                    </span>
-                    <span className="text-muted text-xs">{post.date}</span>
-                  </div>
+                   <div className="flex items-center gap-3 mb-4">
+
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  post.category === "Business"
+                    ? "bg-accent/10"
+                    : "bg-teal/10"
+              }`}>
+
+                {post.category === "Business" ? (
+                  <svg
+                    className="w-5 h-5 text-accent"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 7h16M4 12h10M4 17h7"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-5 h-5 text-teal"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 17L15 12l-5.25-5"
+                    />
+                  </svg>
+                )}
+
+              </div>
+
+              <div>
+                <span className={`text-xs font-bold tracking-widest uppercase ${
+                  post.category === "Business"
+                    ? "text-accent"
+                    : "text-teal"
+                }`}>
+                  {post.category}
+                </span>
+
+                <p className="text-xs text-muted mt-1">
+                  {post.date}
+                </p>
+              </div>
+
+            </div>
                   <h3 className="font-display font-bold text-text text-xl mb-2 group-hover:text-accent transition-colors duration-200">
                     {post.title}
                   </h3>

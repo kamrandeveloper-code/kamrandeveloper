@@ -40,12 +40,12 @@ export default function Header() {
           {/* Logo */}
         <Link href="/" className="flex items-center">
   <Image
-    src="/logo.png"
+    src="/logo.webp"
     alt="Kamran Logo"
     width={180}
     height={100}
     priority
-    className="w-[100px] lg:w-[180px] h-auto"
+    
   />
 </Link>
 

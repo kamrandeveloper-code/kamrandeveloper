@@ -9,17 +9,73 @@ interface FaqAccordionItemProps {
 
 function FaqAccordionItem({ question, answer }: FaqAccordionItemProps) {
   return (
-    <details className="group bg-surface border border-border rounded-xl overflow-hidden">
-      <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none hover:bg-bg/50 transition-colors duration-150">
-        <span className="font-medium text-text text-sm">{question}</span>
-        <svg
-          className="w-4 h-4 text-muted shrink-0 transition-transform duration-200 group-open:rotate-45"
-          fill="none" stroke="currentColor" viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-        </svg>
+    <details
+  className="
+    group
+    bg-surface
+    border
+    border-border
+    rounded-2xl
+    overflow-hidden
+    transition-all
+    duration-300
+    hover:border-accent/30
+    hover:shadow-lg
+    hover:shadow-accent/5
+  "
+>
+      <summary
+  className="
+    flex
+    items-center
+    justify-between
+    gap-5
+    px-6
+    py-5
+    cursor-pointer
+    list-none
+    select-none
+    transition-colors
+    duration-200
+    group-hover:bg-bg/40
+  "
+>
+        <span className="font-semibold text-text text-base leading-snug">{question}</span>
+      <svg
+    className="
+        w-5
+        h-5
+        text-muted
+        shrink-0
+        transition-all
+        duration-300
+        group-open:rotate-180
+        group-open:text-accent
+    "
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+>
+    <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 9l-7 7-7-7"
+    />
+</svg>
       </summary>
-      <div className="px-5 pb-4 pt-1 text-muted text-sm leading-relaxed border-t border-border/60">
+      <div
+  className="
+    px-6
+    pb-6
+    pt-3
+    text-muted
+    text-sm
+    leading-7
+    border-t
+    border-border/60
+  "
+>
         {answer}
       </div>
     </details>

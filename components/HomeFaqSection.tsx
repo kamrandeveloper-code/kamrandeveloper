@@ -13,9 +13,14 @@ export default function HomeFaqSection({ faqs }: Props) {
       <div className="max-w-3xl mx-auto px-5 sm:px-8">
         <div className="text-center mb-10">
           <p className="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-3">FAQ</p>
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-text">
-            Frequently asked questions
-          </h2>
+         <h2 className="font-display font-bold text-4xl sm:text-5xl text-text leading-tight">
+  Questions you may
+  <span className="text-accent"> already have</span>
+</h2>
+
+<p className="mt-5 text-muted max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+  Everything clients usually ask before starting a software project.
+</p>
         </div>
         <FaqAccordion items={faqs} initialVisibleCount={7} />
       </div>

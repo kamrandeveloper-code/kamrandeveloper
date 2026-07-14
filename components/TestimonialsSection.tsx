@@ -20,9 +20,9 @@ export default async function TestimonialsSection() {
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((t) => (
-            <div
+            <article
               key={t.id}
-              className="bg-surface border border-border rounded-2xl p-6 flex flex-col hover:border-accent/30 transition-colors duration-300"
+              className="bg-surface border border-border rounded-2xl p-6 flex flex-col hover:border-accent/30 transition-colors"
             >
               {/* Quote mark */}
               <div className="text-accent/60 text-5xl font-serif leading-none mb-4 select-none">
@@ -30,17 +30,20 @@ export default async function TestimonialsSection() {
               </div>
 
               {/* Quote text */}
-              <p className="text-muted text-sm leading-relaxed flex-1 mb-6">
-                {t.text}
-              </p>
+             <blockquote className="text-muted text-sm leading-relaxed flex-1 mb-6">
+  <p>{t.text}</p>
+</blockquote>
 
               {t.quickSummary && (
                 <p className="text-muted/70 text-xs italic mb-4">{t.quickSummary}</p>
               )}
 
               {/* Author */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center flex-shrink-0">
+              <footer className="flex items-center gap-3">
+               <div
+                    aria-hidden="true"
+                    className="w-10 h-10 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center shrink-0"
+                  >
                   <span className="text-accent font-bold text-sm">
                     {t.initials}
                   </span>
@@ -51,8 +54,8 @@ export default async function TestimonialsSection() {
                     {t.role}, {t.company}
                   </p>
                 </div>
-              </div>
-            </div>
+              </footer>
+            </article>
           ))}
         </div>
       </div>

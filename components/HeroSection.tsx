@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { developer } from "@/data/developer";
@@ -135,23 +133,28 @@ export default function HeroSection() {
             <div className="flex items-center gap-3 mb-8">
               {socialLinks.map((social) => (
                 <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.name}
-                  className="w-10 h-10 rounded-full flex items-center justify-center bg-surface border border-border transition-all duration-200 hover:scale-110"
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = social.color + "18";
-                    (e.currentTarget as HTMLElement).style.borderColor = social.color + "60";
-                    (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 14px ${social.color}35`;
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "";
-                    (e.currentTarget as HTMLElement).style.borderColor = "";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "";
-                  }}
-                >
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.name}
+                    style={
+                      {
+                        "--hover-bg": `${social.color}18`,
+                        "--hover-border": `${social.color}60`,
+                        "--hover-shadow": `0 4px 14px ${social.color}35`,
+                      } as React.CSSProperties
+                    }
+                    className="
+                      w-10 h-10 rounded-full flex items-center justify-center
+                      bg-surface border border-border
+                      transition-all duration-200
+                      hover:scale-110
+                      hover:bg-[var(--hover-bg)]
+                      hover:border-[var(--hover-border)]
+                      hover:shadow-[var(--hover-shadow)]
+                    "
+                  >
                   <svg viewBox="0 0 24 24" className="w-[18px] h-[18px]" style={{ fill: social.color }} aria-hidden="true">
                     <path d={social.path} />
                   </svg>
@@ -160,55 +163,80 @@ export default function HeroSection() {
             </div>
 
             {/* Tech Stack Strip */}
-            <div>
-              {/* <p className="text-xs font-medium text-muted uppercase tracking-widest mb-3">Tech Stack</p> */}
-              <div className="flex flex-wrap gap-2">
-                {techStack.map((tech) => (
-                  <div key={tech.name} className="relative group">
-                    {/* Tooltip */}
-                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-text text-bg text-[11px] font-medium rounded-lg whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10">
-                      {tech.tooltip}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-text" />
-                    </div>
-                    {/* Badge */}
-                    {(() => {
-                      const isGitHub = tech.name === "GitHub";
-                      const Tag = isGitHub ? "a" : "div";
-                      return (
-                        <Tag
-                          {...(isGitHub
-                            ? { href: developer.social.github, target: "_blank", rel: "noopener noreferrer" }
-                            : {})}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-full transition-all duration-200 hover:scale-105 hover:shadow-md hover:border-transparent ${
-                            isGitHub ? "cursor-pointer" : "cursor-default"
-                          }`}
-                          style={{ ["--hover-color" as string]: tech.color + "22" }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.backgroundColor = tech.color + "18";
-                            (e.currentTarget as HTMLElement).style.borderColor = tech.color + "60";
-                            (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${tech.color}30`;
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.backgroundColor = "";
-                            (e.currentTarget as HTMLElement).style.borderColor = "";
-                            (e.currentTarget as HTMLElement).style.boxShadow = "";
-                          }}
-                        >
-                          {"svgContent" in tech ? (
-                            <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" aria-hidden="true" dangerouslySetInnerHTML={{ __html: tech.svgContent as string }} />
-                          ) : (
-                            <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" style={{ fill: tech.color }} aria-hidden="true">
-                              <path d={tech.path} />
-                            </svg>
-                          )}
-                          <span className="text-xs font-medium text-text whitespace-nowrap">{tech.name}</span>
-                        </Tag>
-                      );
-                    })()}
-                  </div>
-                ))}
-              </div>
-            </div>
+         <div>
+  {/* <p className="text-xs font-medium text-muted uppercase tracking-widest mb-3">
+    Tech Stack
+  </p> */}
+
+  <div className="flex flex-wrap gap-2">
+    {techStack.map((tech) => {
+      const isGitHub = tech.name === "GitHub";
+      const Tag = isGitHub ? "a" : "div";
+
+      return (
+        <div key={tech.name} className="relative group">
+          {/* Tooltip */}
+          <div className="absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-text text-bg text-[11px] font-medium rounded-lg whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10">
+            {tech.tooltip}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-text" />
+          </div>
+
+          {/* Badge */}
+          <Tag
+            {...(isGitHub
+              ? {
+                  href: developer.social.github,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                }
+              : {})}
+            style={
+              {
+                "--hover-bg": `${tech.color}18`,
+                "--hover-border": `${tech.color}60`,
+                "--hover-shadow": `0 4px 12px ${tech.color}30`,
+              } as React.CSSProperties
+            }
+            className={`
+              flex items-center gap-1.5 px-3 py-1.5
+              bg-surface border border-border rounded-full
+              transition-all duration-200
+              hover:scale-105
+              hover:bg-[var(--hover-bg)]
+              hover:border-[var(--hover-border)]
+              hover:shadow-[var(--hover-shadow)]
+              ${isGitHub ? "cursor-pointer" : "cursor-default"}
+            `}
+          >
+            {"svgContent" in tech ? (
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4 shrink-0"
+                aria-hidden="true"
+                dangerouslySetInnerHTML={{ __html: tech.svgContent as string }}
+              />
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4 shrink-0"
+                style={{ fill: tech.color }}
+                aria-hidden="true"
+              >
+                <path d={tech.path} />
+              </svg>
+            )}
+
+            <span className="text-xs font-medium text-text whitespace-nowrap">
+              {tech.name}
+            </span>
+          </Tag>
+        </div>
+      );
+    })}
+  </div>
+</div>
+         
+         
           </div>
 
           {/* Right column — profile image */}
