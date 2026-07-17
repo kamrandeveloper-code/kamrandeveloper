@@ -7,6 +7,19 @@ export function linesToArray(value: FormDataEntryValue | null): string[] {
 }
 
 /**
+ * Reads all values submitted under `name` (one per ListInput row) and
+ * further splits any comma-separated leftovers, so pasting "a, b, c" into
+ * a single row still lands as separate list items.
+ */
+export function formDataToList(formData: FormData, name: string): string[] {
+  return formData
+    .getAll(name)
+    .flatMap((value) => String(value).split(","))
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
+/**
  * Parses a textarea where each line is "Step Name :: Detail text" into
  * { step, detail } pairs, used for the Service.process field.
  */

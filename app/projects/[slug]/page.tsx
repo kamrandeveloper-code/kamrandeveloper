@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { getProject, getProjects } from "@/lib/api";
 import { projectSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
+import { formatDate } from "@/lib/format";
 import FaqAccordion from "@/components/FaqAccordion";
 import ContactCTAButton from "@/components/ContactCTAButton";
 
@@ -80,11 +81,33 @@ export default async function ProjectPage({ params }: Props) {
             <span className="text-text font-medium">{project.title}</span>
           </nav>
 
-          {/* ── Hero: text left, visual right ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
+          {/* ── Hero: full-width image on top, text below ── */}
+          <div className="mb-16">
 
-            {/* Left: text */}
-            <div>
+            {/* Full-width project image */}
+            <div className="relative w-full h-64 sm:h-96 lg:h-[28rem] rounded-2xl overflow-hidden border border-border shadow-2xl shadow-black/10 mb-8">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover object-center"
+                priority
+                sizes="(max-width: 1024px) 100vw, 1280px"
+              />
+              {/* Industry badge overlay */}
+              <div className="absolute top-4 left-4">
+                <span
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm"
+                  style={{ color, backgroundColor: `${color}25`, border: `1px solid ${color}50` }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                  {project.industry}
+                </span>
+              </div>
+            </div>
+
+            {/* Text content */}
+            <div className="max-w-3xl">
               <div className="flex flex-wrap items-center gap-2.5 mb-5">
                 <span
                   className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border"
@@ -106,9 +129,12 @@ export default async function ProjectPage({ params }: Props) {
               <h1 className="font-display font-bold text-4xl sm:text-5xl text-text leading-tight mb-5">
                 {project.title}
               </h1>
-              <p className="text-muted text-base sm:text-lg leading-relaxed mb-8">
+              <p className="text-muted text-base sm:text-lg leading-relaxed mb-2">
                 {project.longDescription}
               </p>
+              {project.updatedAt && (
+                <p className="text-muted/70 text-xs mb-8">Last updated {formatDate(project.updatedAt)}</p>
+              )}
 
               {project.quickSummary && (
                 <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mb-8">
@@ -139,27 +165,6 @@ export default async function ProjectPage({ params }: Props) {
                     </svg>
                   </a>
                 )}
-              </div>
-            </div>
-
-            {/* Right: project image */}
-            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-border shadow-2xl shadow-black/10">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover object-center"
-                priority
-              />
-              {/* Industry badge overlay */}
-              <div className="absolute top-4 left-4">
-                <span
-                  className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm"
-                  style={{ color, backgroundColor: `${color}25`, border: `1px solid ${color}50` }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-                  {project.industry}
-                </span>
               </div>
             </div>
 

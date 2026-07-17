@@ -5,13 +5,15 @@ import type { BlogPost } from "@/lib/api";
 import type { ActionState } from "@/lib/actions/blogs";
 import BlogContentEditor from "./BlogContentEditor";
 import FaqRepeater from "../FaqRepeater";
+import ListInput from "../ListInput";
 
 interface Props {
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
   post?: BlogPost;
+  categories?: string[];
 }
 
-export default function BlogForm({ action, post }: Props) {
+export default function BlogForm({ action, post, categories = [] }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
   const [imagePreview, setImagePreview] = useState<string | null>(post?.featuredImage ?? null);
 
@@ -66,15 +68,22 @@ export default function BlogForm({ action, post }: Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-text mb-1.5">Category</label>
-          <select
+          <label className="block text-sm font-medium text-text mb-1.5">
+            Category <span className="text-muted font-normal">(pick an existing one or type your own)</span>
+          </label>
+          <input
             name="category"
-            defaultValue={post?.category ?? "Business"}
+            list="blog-categories"
+            defaultValue={post?.category ?? ""}
+            placeholder="e.g. Business"
+            required
             className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-          >
-            <option value="Business">Business</option>
-            <option value="Technical">Technical</option>
-          </select>
+          />
+          <datalist id="blog-categories">
+            {categories.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
         </div>
         <div>
           <label className="block text-sm font-medium text-text mb-1.5">Date</label>
@@ -132,16 +141,13 @@ export default function BlogForm({ action, post }: Props) {
         <p className="text-xs text-muted mt-1.5">Upload a new image to replace the current one. Leave blank to keep it (or leave unset for none).</p>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Tags <span className="text-muted font-normal">(one per line)</span></label>
-        <textarea
-          name="tags"
-          defaultValue={post?.tags.join("\n")}
-          placeholder={"excel\nautomation\nbusiness-software"}
-          rows={4}
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
-      </div>
+      <ListInput
+        name="tags"
+        label="Tags"
+        defaultValue={post?.tags}
+        placeholder="e.g. automation"
+        hint="add one, or paste several separated by commas"
+      />
 
       <FaqRepeater defaultValue={post?.faqs} />
 

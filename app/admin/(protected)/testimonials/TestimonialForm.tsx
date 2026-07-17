@@ -63,6 +63,19 @@ export default function TestimonialForm({ action, testimonial }: Props) {
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">
+          Email <span className="text-muted font-normal">(optional, internal only — never shown on the public site)</span>
+        </label>
+        <input
+          type="email"
+          name="email"
+          defaultValue={testimonial?.email ?? ""}
+          placeholder="client@company.com"
+          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-text mb-1.5">
           Quick Summary <span className="text-muted font-normal">(optional, short internal note — not required for display)</span>
         </label>
         <textarea

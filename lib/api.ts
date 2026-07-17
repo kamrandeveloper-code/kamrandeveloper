@@ -10,7 +10,7 @@ export interface BlogPost {
   id: number;
   slug: string;
   title: string;
-  category: "Business" | "Technical";
+  category: string;
   date: string;
   excerpt: string;
   content: string;
@@ -117,6 +117,7 @@ export interface Testimonial {
   company: string;
   text: string;
   initials: string;
+  email?: string | null;
   quickSummary?: string | null;
   sortOrder: number;
   createdAt: string;

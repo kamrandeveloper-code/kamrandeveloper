@@ -89,10 +89,20 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1.25em;
 }
 
+.article-content h1,
 .article-content h2,
 .article-content h3,
 .article-content h4 {
   scroll-margin-top: 6rem;
+}
+
+.article-content h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.85rem;
+  color: var(--color-text);
+  margin-top: 2em;
+  margin-bottom: 0.25em;
 }
 
 .article-content h2 {

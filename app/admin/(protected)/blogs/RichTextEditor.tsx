@@ -11,6 +11,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
 import Video from "./tiptap-video";
+import HtmlTagShortcuts from "./tiptap-html-shortcuts";
 
 interface Props {
   value: string;
@@ -116,6 +117,13 @@ function Toolbar({ editor }: { editor: Editor }) {
 
       <Divider />
 
+      <ToolbarButton
+        label="Heading 1"
+        active={editor.isActive("heading", { level: 1 })}
+        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+      >
+        H1
+      </ToolbarButton>
       <ToolbarButton
         label="Heading 2"
         active={editor.isActive("heading", { level: 2 })}
@@ -287,6 +295,7 @@ export default function RichTextEditor({ value, onChange }: Props) {
       TableHeader,
       TableCell,
       Placeholder.configure({ placeholder: "Write your article…" }),
+      HtmlTagShortcuts,
     ],
     content: value,
     immediatelyRender: false,

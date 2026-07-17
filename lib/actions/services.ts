@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminFetch } from "@/lib/admin-auth";
-import { linesToArray, linesToProcessSteps, formDataToFaqs } from "@/lib/actions/shared";
+import { formDataToList, linesToProcessSteps, formDataToFaqs } from "@/lib/actions/shared";
 
 export interface ActionState {
   error?: string;
@@ -16,15 +16,15 @@ function buildPayload(formData: FormData) {
     tagline: String(formData.get("tagline") ?? ""),
     description: String(formData.get("description") ?? ""),
     longDescription: String(formData.get("longDescription") ?? ""),
-    benefits: linesToArray(formData.get("benefits")),
+    benefits: formDataToList(formData, "benefits"),
     process: linesToProcessSteps(formData.get("process")),
-    idealFor: linesToArray(formData.get("idealFor")),
+    idealFor: formDataToList(formData, "idealFor"),
     engagement: {
       type: String(formData.get("engagementType") ?? ""),
       timeline: String(formData.get("engagementTimeline") ?? ""),
       note: String(formData.get("engagementNote") ?? ""),
     },
-    technologies: linesToArray(formData.get("technologies")),
+    technologies: formDataToList(formData, "technologies"),
     quickSummary: String(formData.get("quickSummary") ?? "").trim() || null,
     faqs: formDataToFaqs(formData),
     featured: formData.get("featured") === "on",

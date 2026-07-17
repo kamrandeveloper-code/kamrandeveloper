@@ -1,10 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import type { Service } from "@/lib/api";
 import type { ActionState } from "@/lib/actions/services";
 import { processStepsToLines } from "@/lib/actions/shared";
 import FaqRepeater from "../FaqRepeater";
+import ListInput from "../ListInput";
+import RichTextEditor from "../blogs/RichTextEditor";
 
 interface Props {
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -13,6 +15,7 @@ interface Props {
 
 export default function ServiceForm({ action, service }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
+  const [longDescription, setLongDescription] = useState(service?.longDescription ?? "");
 
   return (
     <form action={formAction} className="max-w-2xl space-y-5">
@@ -78,24 +81,16 @@ export default function ServiceForm({ action, service }: Props) {
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">Long Description</label>
-        <textarea
-          name="longDescription"
-          defaultValue={service?.longDescription}
-          rows={5}
-          required
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
+        <RichTextEditor value={longDescription} onChange={setLongDescription} />
+        <input type="hidden" name="longDescription" value={longDescription} />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Benefits <span className="text-muted font-normal">(one per line)</span></label>
-        <textarea
-          name="benefits"
-          defaultValue={service?.benefits.join("\n")}
-          rows={4}
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
-      </div>
+      <ListInput
+        name="benefits"
+        label="Benefits"
+        defaultValue={service?.benefits}
+        hint="add one, or paste several separated by commas"
+      />
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">
@@ -110,15 +105,12 @@ export default function ServiceForm({ action, service }: Props) {
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Ideal for <span className="text-muted font-normal">(one per line)</span></label>
-        <textarea
-          name="idealFor"
-          defaultValue={service?.idealFor.join("\n")}
-          rows={4}
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
-      </div>
+      <ListInput
+        name="idealFor"
+        label="Ideal for"
+        defaultValue={service?.idealFor}
+        hint="add one, or paste several separated by commas"
+      />
 
       <div>
         <p className="block text-sm font-medium text-text mb-1.5">Engagement</p>
@@ -148,15 +140,12 @@ export default function ServiceForm({ action, service }: Props) {
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Technologies <span className="text-muted font-normal">(one per line)</span></label>
-        <textarea
-          name="technologies"
-          defaultValue={service?.technologies.join("\n")}
-          rows={3}
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
-      </div>
+      <ListInput
+        name="technologies"
+        label="Technologies"
+        defaultValue={service?.technologies}
+        hint="add one, or paste several separated by commas"
+      />
 
       <FaqRepeater defaultValue={service?.faqs} />
 

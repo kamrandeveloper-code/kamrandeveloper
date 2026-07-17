@@ -5,6 +5,7 @@ import { getService, getServices } from "@/lib/api";
 import { serviceIcons } from "@/components/ServiceCard";
 import { serviceSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { baseMetadata, BASE_URL } from "@/lib/seo";
+import { formatDate } from "@/lib/format";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
 import FaqAccordion from "@/components/FaqAccordion";
@@ -91,6 +92,9 @@ export default async function ServiceDetailPage({ params }: Props) {
             <p className="text-muted text-lg leading-relaxed max-w-2xl">
               {service.tagline}
             </p>
+            {service.updatedAt && (
+              <p className="text-muted/70 text-xs mt-3">Last updated {formatDate(service.updatedAt)}</p>
+            )}
             {service.quickSummary && (
               <div className="bg-accent/5 border border-accent/20 rounded-xl p-5 mt-6 max-w-2xl">
                 <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2">Quick Summary</p>
@@ -108,9 +112,10 @@ export default async function ServiceDetailPage({ params }: Props) {
               {/* Long description */}
               <div>
                 <h2 className="font-display font-bold text-xl text-text mb-4">Overview</h2>
-                <p className="text-muted leading-relaxed text-base sm:text-lg">
-                  {service.longDescription}
-                </p>
+                <div
+                  className="article-content text-muted leading-relaxed text-base sm:text-lg"
+                  dangerouslySetInnerHTML={{ __html: service.longDescription }}
+                />
               </div>
 
               {/* Benefits */}

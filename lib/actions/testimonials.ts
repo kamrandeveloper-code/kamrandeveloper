@@ -15,6 +15,7 @@ function buildPayload(formData: FormData) {
     company: String(formData.get("company") ?? ""),
     text: String(formData.get("text") ?? ""),
     initials: String(formData.get("initials") ?? ""),
+    email: String(formData.get("email") ?? "").trim() || null,
     quickSummary: String(formData.get("quickSummary") ?? "").trim() || null,
     sortOrder: Number(formData.get("sortOrder") ?? 0),
   };

@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import ContactFloat from "@/components/ContactFloat";
 import { EmailPopupProvider } from "@/components/EmailPopupContext";
 import { baseMetadata } from "@/lib/seo";
-import { personSchema, websiteSchema, organizationSchema } from "@/lib/schema";
+import { personSchema, websiteSchema, organizationSchema, localBusinessSchema } from "@/lib/schema";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -63,6 +63,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema()) }}
         />
 
         <EmailPopupProvider>

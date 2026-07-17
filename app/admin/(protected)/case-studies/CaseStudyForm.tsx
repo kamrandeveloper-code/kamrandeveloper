@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import type { CaseStudy } from "@/lib/api";
 import type { ActionState } from "@/lib/actions/case-studies";
 import FaqRepeater from "../FaqRepeater";
+import ListInput from "../ListInput";
+import RichTextEditor from "../blogs/RichTextEditor";
 
 interface Props {
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
@@ -12,6 +14,7 @@ interface Props {
 
 export default function CaseStudyForm({ action, caseStudy }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
+  const [content, setContent] = useState(caseStudy?.content ?? "");
 
   return (
     <form action={formAction} className="max-w-2xl space-y-5">
@@ -130,15 +133,12 @@ export default function CaseStudyForm({ action, caseStudy }: Props) {
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Features <span className="text-muted font-normal">(one per line)</span></label>
-        <textarea
-          name="features"
-          defaultValue={caseStudy?.features.join("\n")}
-          rows={5}
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
-      </div>
+      <ListInput
+        name="features"
+        label="Features"
+        defaultValue={caseStudy?.features}
+        hint="add one, or paste several separated by commas"
+      />
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">
@@ -153,27 +153,17 @@ export default function CaseStudyForm({ action, caseStudy }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-text mb-1.5">
-          Technical Deep Dive <span className="text-muted font-normal">(markdown — use ## and ### for headings)</span>
-        </label>
-        <textarea
-          name="content"
-          defaultValue={caseStudy?.content}
-          rows={16}
-          required
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm font-mono focus:outline-none focus:border-accent"
-        />
+        <label className="block text-sm font-medium text-text mb-1.5">Technical Deep Dive</label>
+        <RichTextEditor value={content} onChange={setContent} />
+        <input type="hidden" name="content" value={content} />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Tech stack <span className="text-muted font-normal">(one per line)</span></label>
-        <textarea
-          name="tech"
-          defaultValue={caseStudy?.tech.join("\n")}
-          rows={4}
-          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
-        />
-      </div>
+      <ListInput
+        name="tech"
+        label="Tech stack"
+        defaultValue={caseStudy?.tech}
+        hint="add one, or paste several separated by commas"
+      />
 
       <FaqRepeater defaultValue={caseStudy?.faqs} />
 

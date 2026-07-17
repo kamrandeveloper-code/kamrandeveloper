@@ -1,11 +1,15 @@
 import { getTestimonials } from "@/lib/api";
+import { testimonialsSchema } from "@/lib/schema";
 
 export default async function TestimonialsSection() {
   const testimonials = await getTestimonials();
   if (testimonials.length === 0) return null;
 
+  const schema = testimonialsSchema(testimonials);
+
   return (
     <section className="py-24 bg-bg">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">

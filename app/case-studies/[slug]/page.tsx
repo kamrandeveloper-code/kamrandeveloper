@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getCaseStudies, getCaseStudy } from "@/lib/api";
 import { articleSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
+import { formatDate } from "@/lib/format";
 import AboutMeCard from "@/components/AboutMeCard";
 import RelatedCarousel from "@/components/RelatedCarousel";
 import FaqAccordion from "@/components/FaqAccordion";
@@ -55,11 +56,6 @@ export default async function CaseStudyPage({ params }: Props) {
     { name: project.title, url: `${BASE_URL}/case-studies/${project.slug}` },
   ]);
 
-  const paragraphs = project.content
-    .split("\n\n")
-    .map((p) => p.trim())
-    .filter(Boolean);
-
   const allCaseStudies = await getCaseStudies();
   const related = allCaseStudies.filter((c) => c.slug !== slug).slice(0, 6);
 
@@ -102,6 +98,9 @@ export default async function CaseStudyPage({ params }: Props) {
               {project.title}
             </h1>
             <p className="text-muted text-xl leading-relaxed">{project.description}</p>
+            {project.updatedAt && (
+              <p className="text-muted/70 text-xs mt-3">Last updated {formatDate(project.updatedAt)}</p>
+            )}
           </div>
 
           {/* Quick Summary */}
@@ -165,29 +164,7 @@ export default async function CaseStudyPage({ params }: Props) {
           {/* Full case study content */}
           <div className="mb-10">
             <h2 className="font-display font-bold text-2xl text-text mb-6">Technical Deep Dive</h2>
-            <div className="prose-content space-y-5">
-              {paragraphs.map((para, i) => {
-                if (para.startsWith("## ")) {
-                  return (
-                    <h2 key={i} className="font-display font-bold text-2xl sm:text-3xl text-text mt-12 mb-2">
-                      {para.replace("## ", "")}
-                    </h2>
-                  );
-                }
-                if (para.startsWith("### ")) {
-                  return (
-                    <h3 key={i} className="font-display font-bold text-xl text-text mt-8 mb-2">
-                      {para.replace("### ", "")}
-                    </h3>
-                  );
-                }
-                return (
-                  <p key={i} className="text-muted leading-relaxed">
-                    {para}
-                  </p>
-                );
-              })}
-            </div>
+            <div className="article-content" dangerouslySetInnerHTML={{ __html: project.content }} />
           </div>
 
           {/* Technologies */}

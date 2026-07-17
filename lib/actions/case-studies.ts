@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminFetch } from "@/lib/admin-auth";
-import { linesToArray, formDataToFaqs } from "@/lib/actions/shared";
+import { formDataToList, formDataToFaqs } from "@/lib/actions/shared";
 import { resolveImageUrl } from "@/lib/actions/image-upload";
 
 export interface ActionState {
@@ -30,9 +30,9 @@ async function buildPayload(formData: FormData) {
     problem: String(formData.get("problem") ?? ""),
     solution: String(formData.get("solution") ?? ""),
     result: String(formData.get("result") ?? ""),
-    features: linesToArray(formData.get("features")),
+    features: formDataToList(formData, "features"),
     architecture: architecture.length > 0 ? architecture : null,
-    tech: linesToArray(formData.get("tech")),
+    tech: formDataToList(formData, "tech"),
     category: String(formData.get("category") ?? ""),
     imageUrl: await resolveImageUrl(formData),
     featured: formData.get("featured") === "on",

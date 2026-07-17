@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { adminFetch } from "@/lib/admin-auth";
-import { linesToArray, formDataToFaqs } from "@/lib/actions/shared";
+import { formDataToList, formDataToFaqs } from "@/lib/actions/shared";
 import { resolveImageUrl } from "@/lib/actions/image-upload";
 
 export interface ActionState {
@@ -14,12 +14,12 @@ async function buildPayload(formData: FormData) {
   return {
     slug: String(formData.get("slug") ?? ""),
     title: String(formData.get("title") ?? ""),
-    category: String(formData.get("category") ?? "Business"),
+    category: String(formData.get("category") ?? ""),
     date: String(formData.get("date") ?? ""),
     excerpt: String(formData.get("excerpt") ?? ""),
     content: String(formData.get("content") ?? ""),
     featuredImage: await resolveImageUrl(formData, "featuredImage", "existingFeaturedImageUrl"),
-    tags: linesToArray(formData.get("tags")),
+    tags: formDataToList(formData, "tags"),
     quickSummary: String(formData.get("quickSummary") ?? "").trim() || null,
     faqs: formDataToFaqs(formData),
     sortOrder: Number(formData.get("sortOrder") ?? 0),

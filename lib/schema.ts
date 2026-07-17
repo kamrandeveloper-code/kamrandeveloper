@@ -44,6 +44,26 @@ export function personSchema() {
   };
 }
 
+export function localBusinessSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Kamran Developer",
+    url: SITE_URL,
+    image: `${SITE_URL}/logo.png`,
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "PK",
+      addressLocality: "Pakistan",
+    },
+    sameAs: [
+      "https://share.google/ZrE7OwSKI2ojYSO0A",
+      process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "https://linkedin.com",
+      process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com",
+    ],
+  };
+}
+
 export function websiteSchema() {
   return {
     "@context": "https://schema.org",
@@ -157,6 +177,18 @@ export function articleSchema(article: {
       name: "Kamran — Custom Software Developer",
       logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
     },
+  };
+}
+
+export function testimonialsSchema(testimonials: { name: string; text: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": testimonials.map((t) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: t.name },
+      reviewBody: t.text,
+      itemReviewed: { "@type": "Organization", name: "Kamran — Custom Software Developer" },
+    })),
   };
 }
 

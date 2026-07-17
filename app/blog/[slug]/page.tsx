@@ -7,6 +7,7 @@ import { articleSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 import { injectHeadingIds } from "@/lib/toc";
 import { injectCtaCard } from "@/lib/embeds";
+import { formatDate } from "@/lib/format";
 import TableOfContents from "@/components/TableOfContents";
 import ScrollToHash from "@/components/ScrollToHash";
 import AboutMeCard from "@/components/AboutMeCard";
@@ -127,6 +128,9 @@ async function ArticlePage({ post }: { post: BlogPost }) {
                 {post.category}
               </span>
               <span className="text-muted text-sm">{post.date}</span>
+              {post.updatedAt && (
+                <span className="text-muted/70 text-xs">Last updated {formatDate(post.updatedAt)}</span>
+              )}
             </div>
             <h1 className="font-display font-bold text-4xl sm:text-5xl text-text mb-5 leading-tight">
               {post.title}
@@ -217,11 +221,6 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
     { name: project.title, url: `${BASE_URL}/blog/${project.slug}` },
   ]);
 
-  const paragraphs = project.blogPost
-    .split("\n\n")
-    .map((p) => p.trim())
-    .filter(Boolean);
-
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
@@ -272,29 +271,7 @@ function ProjectCaseStudyPage({ project }: { project: Project }) {
             </div>
           </div>
 
-          <div className="space-y-5 mb-16">
-            {paragraphs.map((para, i) => {
-              if (para.startsWith("## ")) {
-                return (
-                  <h2 key={i} className="font-display font-bold text-2xl sm:text-3xl text-text mt-12 mb-2">
-                    {para.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (para.startsWith("### ")) {
-                return (
-                  <h3 key={i} className="font-display font-bold text-xl text-text mt-8 mb-2">
-                    {para.replace("### ", "")}
-                  </h3>
-                );
-              }
-              return (
-                <p key={i} className="text-muted leading-relaxed">
-                  {para}
-                </p>
-              );
-            })}
-          </div>
+          <div className="article-content mb-16" dangerouslySetInnerHTML={{ __html: project.blogPost }} />
 
           {project.faqs.length > 0 && (
             <div className="mb-16">
