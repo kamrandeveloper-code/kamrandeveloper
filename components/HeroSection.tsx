@@ -102,14 +102,14 @@ export default function HeroSection() {
       <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-bg to-transparent" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 pt-24 pb-14 sm:pt-28 sm:pb-16 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-12 lg:gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-2 lg:gap-4 items-center">
 
           {/* Left column */}
           <div>
             {/* Headline */}
             <h1 className="font-display font-bold tracking-tight leading-[1.05] text-[2.5rem] sm:text-[3.1rem] lg:text-[3.6rem] xl:text-[4rem] text-text mb-5">
-              Custom Software Developer{" "}
-              <span className="text-accent">for Growing Businesses</span>
+              Building Software for Industries Where Getting It{" "}
+              <span className="text-accent">Wrong is Expensive.</span>
             </h1>
 
             {/* Subheading */}
@@ -249,14 +249,15 @@ export default function HeroSection() {
           <div className="hidden lg:flex items-center justify-end">
             <div className="relative w-full overflow-hidden">
               <Image
-                src="/kamran-custom-software-developer.png"
-                alt="Kamran — Custom Software Developer"
+                src="/custom-software-developer.webp"
+                alt="Custom Software Developer Kamran — Building Software for Industries Where Getting It Wrong is Expensive."
                 width={420}
-                height={500}
-                className="object-cover object-top w-full h-auto"
+                height={600}
+                className="object-cover object-top w-full rounded-lg shadow-lg shadow-accent/20"
                 priority
               />
             </div>
+
           </div>
 
         </div>

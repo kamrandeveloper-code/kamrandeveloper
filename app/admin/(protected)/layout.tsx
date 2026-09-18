@@ -22,6 +22,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/admin/case-studies" className="text-sm text-muted hover:text-accent transition-colors">
               Case Studies
             </Link>
+            <Link href="/admin/industries" className="text-sm text-muted hover:text-accent transition-colors">
+              Industries
+            </Link>
             <Link href="/admin/testimonials" className="text-sm text-muted hover:text-accent transition-colors">
               Testimonials
             </Link>

@@ -26,6 +26,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   return (
     <html lang="en" className={`h-full ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-bg text-text antialiased">
@@ -38,18 +40,22 @@ export default function RootLayout({
         </a>
 
         {/* Google Analytics — loaded after page becomes interactive */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NWH29T6PSN"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-NWH29T6PSN');
-          `}
-        </Script>
+        {gaMeasurementId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaMeasurementId}');
+              `}
+            </Script>
+          </>
+        )}
 
         {/* JSON-LD schemas */}
         <script

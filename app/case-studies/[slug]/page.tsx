@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getCaseStudies, getCaseStudy } from "@/lib/api";
+import { getCaseStudies, getCaseStudy, getIndustries } from "@/lib/api";
 import { articleSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/format";
@@ -59,6 +59,11 @@ export default async function CaseStudyPage({ params }: Props) {
   const allCaseStudies = await getCaseStudies();
   const related = allCaseStudies.filter((c) => c.slug !== slug).slice(0, 6);
 
+  const industries = await getIndustries();
+  const matchedIndustry = industries.find(
+    (i) => i.title.trim().toLowerCase() === project.industry.trim().toLowerCase()
+  );
+
   return (
     <>
       <script
@@ -87,9 +92,18 @@ export default async function CaseStudyPage({ params }: Props) {
           {/* Header */}
           <div className="mb-10">
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <span className="text-xs font-bold tracking-widest uppercase text-teal bg-teal/10 px-3 py-1 rounded-full">
-                {project.industry}
-              </span>
+              {matchedIndustry ? (
+                <Link
+                  href={`/industry/${matchedIndustry.slug}`}
+                  className="text-xs font-bold tracking-widest uppercase text-teal bg-teal/10 hover:bg-teal/20 px-3 py-1 rounded-full transition-colors"
+                >
+                  {project.industry}
+                </Link>
+              ) : (
+                <span className="text-xs font-bold tracking-widest uppercase text-teal bg-teal/10 px-3 py-1 rounded-full">
+                  {project.industry}
+                </span>
+              )}
               <span className="text-xs font-medium text-muted bg-surface border border-border px-3 py-1 rounded-full">
                 Case Study
               </span>

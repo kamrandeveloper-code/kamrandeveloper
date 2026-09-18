@@ -98,7 +98,9 @@ export default function BlogForm({ action, post, categories = [] }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Excerpt</label>
+        <label className="block text-sm font-medium text-text mb-1.5">
+          Summary <span className="text-muted font-normal">(shown on blog cards, and used as the search/social description unless overridden below)</span>
+        </label>
         <textarea
           name="excerpt"
           defaultValue={post?.excerpt}
@@ -111,7 +113,7 @@ export default function BlogForm({ action, post, categories = [] }: Props) {
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">
-          Quick Summary <span className="text-muted font-normal">(optional — shown as a TL;DR box if filled in)</span>
+          In-Article TL;DR <span className="text-muted font-normal">(optional — shown as a callout box inside the article itself, not on cards)</span>
         </label>
         <textarea
           name="quickSummary"
@@ -123,6 +125,87 @@ export default function BlogForm({ action, post, categories = [] }: Props) {
       </div>
 
       <BlogContentEditor defaultValue={post?.content} />
+
+      <details className="border border-border rounded-lg px-4 py-3 group">
+        <summary className="cursor-pointer text-sm font-medium text-text select-none">
+          SEO &amp; social overrides <span className="text-muted font-normal">(optional — leave blank to fall back to Title / Summary above)</span>
+        </summary>
+        <div className="mt-4 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-text mb-1.5">
+              Meta Title <span className="text-muted font-normal">(falls back to Title)</span>
+            </label>
+            <input
+              name="metaTitle"
+              defaultValue={post?.metaTitle ?? ""}
+              placeholder={post?.title || "e.g. When to Replace Excel with Custom Software"}
+              className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-text mb-1.5">
+              Meta Description <span className="text-muted font-normal">(falls back to Summary)</span>
+            </label>
+            <textarea
+              name="metaDescription"
+              defaultValue={post?.metaDescription ?? ""}
+              rows={2}
+              placeholder="Shown under the title in Google search results…"
+              className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-text mb-1.5">
+                OG Title <span className="text-muted font-normal">(falls back to Meta Title)</span>
+              </label>
+              <input
+                name="ogTitle"
+                defaultValue={post?.ogTitle ?? ""}
+                placeholder="Title shown when shared on Facebook/LinkedIn"
+                className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-text mb-1.5">
+                Twitter Title <span className="text-muted font-normal">(falls back to OG Title)</span>
+              </label>
+              <input
+                name="twitterTitle"
+                defaultValue={post?.twitterTitle ?? ""}
+                placeholder="Title shown when shared on X/Twitter"
+                className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-text mb-1.5">
+                OG Description <span className="text-muted font-normal">(falls back to Meta Description)</span>
+              </label>
+              <textarea
+                name="ogDescription"
+                defaultValue={post?.ogDescription ?? ""}
+                rows={2}
+                placeholder="Description shown when shared on Facebook/LinkedIn"
+                className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-text mb-1.5">
+                Twitter Description <span className="text-muted font-normal">(falls back to OG Description)</span>
+              </label>
+              <textarea
+                name="twitterDescription"
+                defaultValue={post?.twitterDescription ?? ""}
+                rows={2}
+                placeholder="Description shown when shared on X/Twitter"
+                className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+              />
+            </div>
+          </div>
+        </div>
+      </details>
 
       <div>
         <label className="block text-sm font-medium text-text mb-1.5">Featured image</label>
@@ -161,13 +244,30 @@ export default function BlogForm({ action, post, categories = [] }: Props) {
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="px-5 py-2.5 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60"
-      >
-        {pending ? "Saving…" : "Save"}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          name="status"
+          value="draft"
+          formNoValidate
+          disabled={pending}
+          className="px-5 py-2.5 bg-surface border border-border hover:border-accent text-text text-sm font-semibold rounded-lg transition-colors disabled:opacity-60"
+        >
+          {pending ? "Saving…" : "Save Draft"}
+        </button>
+        <button
+          type="submit"
+          name="status"
+          value="published"
+          disabled={pending}
+          className="px-5 py-2.5 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60"
+        >
+          {pending ? "Saving…" : post?.status === "published" ? "Update" : "Publish"}
+        </button>
+        <span className="text-xs text-muted">
+          Save Draft skips required fields so you can save half-finished work.
+        </span>
+      </div>
     </form>
   );
 }

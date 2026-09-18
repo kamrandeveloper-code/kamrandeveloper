@@ -2,10 +2,18 @@ import Link from "next/link";
 import { adminFetch } from "@/lib/admin-auth";
 import type { SiteFaq } from "@/lib/api";
 import { deleteFaq } from "@/lib/actions/faqs";
+import { paginate } from "@/lib/pagination";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminFaqsPage() {
+interface Props {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function AdminFaqsPage({ searchParams }: Props) {
+  const { page } = await searchParams;
   const res = await adminFetch("/api/sitefaqs");
-  const faqs: SiteFaq[] = res.ok ? await res.json() : [];
+  const allFaqs: SiteFaq[] = res.ok ? await res.json() : [];
+  const { pageItems: faqs, currentPage, totalPages } = paginate(allFaqs, Number(page));
 
   return (
     <div>
@@ -56,6 +64,7 @@ export default async function AdminFaqsPage() {
           </table>
           </div>
         )}
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   );

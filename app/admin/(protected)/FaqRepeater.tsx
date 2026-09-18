@@ -11,6 +11,53 @@ interface Props {
   defaultValue?: FaqPair[];
 }
 
+function stripLabel(line: string): string {
+  return line
+    .replace(/^\s*(?:q(?:uestion)?|a(?:nswer)?)\s*\d*\s*[:.)]\s*/i, "")
+    .replace(/^\s*\d+\s*[.)]\s*/, "")
+    .trim();
+}
+
+function isQuestionLine(line: string): boolean {
+  return /^\s*(?:q(?:uestion)?\s*\d*\s*[:.)])/i.test(line) || /\?\s*$/.test(line.trim());
+}
+
+// Splits a pasted block of text into Q/A pairs. Handles "Q:/A:", "Question:/Answer:",
+// numbered lists, and plain lines ending in "?" followed by their answer. Returns null
+// when the text doesn't look like multiple FAQs, so a normal single-line paste still works.
+function parseFaqBlock(text: string): FaqPair[] | null {
+  const lines = text
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0);
+
+  if (lines.length < 2) return null;
+
+  const pairs: FaqPair[] = [];
+  let question: string | null = null;
+  let answerLines: string[] = [];
+
+  for (const line of lines) {
+    if (isQuestionLine(line) && (question === null || answerLines.length > 0)) {
+      if (question !== null) {
+        pairs.push({ question, answer: answerLines.join(" ").trim() });
+      }
+      question = stripLabel(line);
+      answerLines = [];
+    } else if (question !== null) {
+      answerLines.push(stripLabel(line));
+    } else {
+      return null;
+    }
+  }
+  if (question !== null) {
+    pairs.push({ question, answer: answerLines.join(" ").trim() });
+  }
+
+  return pairs.length > 0 ? pairs : null;
+}
+
 export default function FaqRepeater({ defaultValue = [] }: Props) {
   const [faqs, setFaqs] = useState<FaqPair[]>(defaultValue);
 
@@ -26,10 +73,25 @@ export default function FaqRepeater({ defaultValue = [] }: Props) {
     setFaqs((prev) => prev.map((f, i) => (i === index ? { ...f, [field]: value } : f)));
   }
 
+  function handleBulkPaste(index: number, e: React.ClipboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const text = e.clipboardData.getData("text");
+    const parsed = parseFaqBlock(text);
+    if (!parsed) return;
+    e.preventDefault();
+    setFaqs((prev) => {
+      const next = [...prev];
+      next.splice(index, 1, ...parsed);
+      return next;
+    });
+  }
+
   return (
     <div>
       <label className="block text-sm font-medium text-text mb-1.5">
-        FAQs <span className="text-muted font-normal">(optional — shown as a FAQ accordion at the end of the page)</span>
+        FAQs{" "}
+        <span className="text-muted font-normal">
+          (optional — shown as a FAQ accordion at the end of the page. Paste a whole block of Q&amp;A text into any field to auto-split it into separate FAQs)
+        </span>
       </label>
 
       {faqs.length > 0 && (
@@ -50,6 +112,7 @@ export default function FaqRepeater({ defaultValue = [] }: Props) {
                 name="faqQuestion"
                 value={faq.question}
                 onChange={(e) => updateFaq(index, "question", e.target.value)}
+                onPaste={(e) => handleBulkPaste(index, e)}
                 placeholder="Question"
                 className="w-full px-3 py-2 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
               />
@@ -57,6 +120,7 @@ export default function FaqRepeater({ defaultValue = [] }: Props) {
                 name="faqAnswer"
                 value={faq.answer}
                 onChange={(e) => updateFaq(index, "answer", e.target.value)}
+                onPaste={(e) => handleBulkPaste(index, e)}
                 placeholder="Answer"
                 rows={2}
                 className="w-full px-3 py-2 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"

@@ -136,13 +136,15 @@ export default async function ProjectsPage() {
                     {project.description}
                   </p>
 
-                  {/* Result highlight */}
-                  <div className="flex items-start gap-2 mb-5 p-3 rounded-xl bg-bg border border-border/60">
-                    <svg className="w-4 h-4 text-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                    <p className="text-muted text-xs leading-relaxed">{project.result}</p>
-                  </div>
+                  {/* Quick summary highlight */}
+                  {project.quickSummary && (
+                    <div className="flex items-start gap-2 mb-5 p-3 rounded-xl bg-bg border border-border/60">
+                      <svg className="w-4 h-4 text-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      <p className="text-muted text-xs leading-relaxed">{project.quickSummary}</p>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between">
                     <div className="flex flex-wrap gap-1.5">

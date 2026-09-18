@@ -1,8 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
-import { developer } from "@/data/developer";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -20,19 +18,16 @@ export default function EmailCompose({ onSuccess }: Props) {
     setStatus("sending");
     const data = new FormData(formRef.current);
     try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: data.get("from_name"),
-          from_name: data.get("from_name"),
-          from_email: data.get("from_email"),
+          email: data.get("from_email"),
           message: data.get("message"),
-          to_name: developer.name,
-          to_email: developer.email,
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-      );
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to send");
       setStatus("sent");
       formRef.current.reset();
       setTimeout(() => {

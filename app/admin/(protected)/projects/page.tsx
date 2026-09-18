@@ -2,10 +2,18 @@ import Link from "next/link";
 import { adminFetch } from "@/lib/admin-auth";
 import type { Project } from "@/lib/api";
 import { deleteProject } from "@/lib/actions/projects";
+import { paginate } from "@/lib/pagination";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminProjectsPage() {
+interface Props {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function AdminProjectsPage({ searchParams }: Props) {
+  const { page } = await searchParams;
   const res = await adminFetch("/api/projects");
-  const projects: Project[] = res.ok ? await res.json() : [];
+  const allProjects: Project[] = res.ok ? await res.json() : [];
+  const { pageItems: projects, currentPage, totalPages } = paginate(allProjects, Number(page));
 
   return (
     <div>
@@ -58,6 +66,7 @@ export default async function AdminProjectsPage() {
           </table>
           </div>
         )}
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   );

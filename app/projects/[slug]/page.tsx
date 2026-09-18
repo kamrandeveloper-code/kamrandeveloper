@@ -2,12 +2,13 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { getProject, getProjects } from "@/lib/api";
+import { getProject, getProjects, getIndustries } from "@/lib/api";
 import { projectSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { BASE_URL, baseMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/format";
 import FaqAccordion from "@/components/FaqAccordion";
 import ContactCTAButton from "@/components/ContactCTAButton";
+import CopyButton from "@/components/projects/CopyButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -25,14 +26,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) return {};
+
+  const metaTitle = project.metaTitle || project.title;
+  const metaDescription = project.metaDescription || project.description;
+  const ogTitle = project.ogTitle || metaTitle;
+  const ogDescription = project.ogDescription || metaDescription;
+  const twitterTitle = project.twitterTitle || ogTitle;
+  const twitterDescription = project.twitterDescription || ogDescription;
+  const ogImage = project.bannerImage || project.image;
+
   return baseMetadata({
-    title: project.title,
-    description: project.description,
+    title: metaTitle,
+    description: metaDescription,
     alternates: { canonical: `${BASE_URL}/projects/${slug}` },
     openGraph: {
-      title: `${project.title} | Kamran`,
-      description: project.description,
+      title: ogTitle,
+      description: ogDescription,
       url: `${BASE_URL}/projects/${slug}`,
+      images: [{ url: ogImage, alt: project.title }],
+    },
+    twitter: {
+      title: twitterTitle,
+      description: twitterDescription,
+      images: [ogImage],
     },
   });
 }
@@ -53,6 +69,11 @@ export default async function ProjectPage({ params }: Props) {
   const allProjects = await getProjects();
   const related = allProjects.filter((p) => p.slug !== slug).slice(0, 3);
   const color = industryColors[project.industry] ?? "var(--color-accent)";
+
+  const industries = await getIndustries();
+  const matchedIndustry = industries.find(
+    (i) => i.title.trim().toLowerCase() === project.industry.trim().toLowerCase()
+  );
 
   const schema = projectSchema({ title: project.title, description: project.description, technologies: project.tech });
   const breadcrumb = breadcrumbSchema([
@@ -87,7 +108,7 @@ export default async function ProjectPage({ params }: Props) {
             {/* Full-width project image */}
             <div className="relative w-full h-64 sm:h-96 lg:h-[28rem] rounded-2xl overflow-hidden border border-border shadow-2xl shadow-black/10 mb-8">
               <Image
-                src={project.image}
+                src={project.bannerImage || project.image}
                 alt={project.title}
                 fill
                 className="object-cover object-center"
@@ -96,18 +117,29 @@ export default async function ProjectPage({ params }: Props) {
               />
               {/* Industry badge overlay */}
               <div className="absolute top-4 left-4">
-                <span
-                  className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm"
-                  style={{ color, backgroundColor: `${color}25`, border: `1px solid ${color}50` }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-                  {project.industry}
-                </span>
+                {matchedIndustry ? (
+                  <Link
+                    href={`/industry/${matchedIndustry.slug}`}
+                    className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm"
+                    style={{ color, backgroundColor: `${color}25`, border: `1px solid ${color}50` }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                    {project.industry}
+                  </Link>
+                ) : (
+                  <span
+                    className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-sm"
+                    style={{ color, backgroundColor: `${color}25`, border: `1px solid ${color}50` }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                    {project.industry}
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Text content */}
-            <div className="max-w-3xl">
+            <div>
               <div className="flex flex-wrap items-center gap-2.5 mb-5">
                 <span
                   className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border"
@@ -143,6 +175,41 @@ export default async function ProjectPage({ params }: Props) {
                 </div>
               )}
 
+              {project.demo && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 bg-accent/5 border border-accent/20 rounded-2xl p-5 mb-8">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold tracking-widest uppercase text-accent mb-2.5">Try the Live Demo</p>
+                    <div className="flex flex-wrap gap-2.5">
+                      <div className="bg-bg border border-border rounded-lg px-3 py-2 flex items-center gap-2">
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-0.5">Email</p>
+                          <p className="text-text text-xs font-mono truncate">{project.demo.email}</p>
+                        </div>
+                        <CopyButton text={project.demo.email} />
+                      </div>
+                      <div className="bg-bg border border-border rounded-lg px-3 py-2 flex items-center gap-2">
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-0.5">Password</p>
+                          <p className="text-text text-xs font-mono truncate">{project.demo.password}</p>
+                        </div>
+                        <CopyButton text={project.demo.password} />
+                      </div>
+                    </div>
+                  </div>
+                  <a
+                    href={project.demo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-xl transition-all duration-200"
+                  >
+                    Launch Demo
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              )}
+
               <div className="flex flex-wrap gap-3">
                 <ContactCTAButton
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent hover:bg-[var(--color-accent-hover)] text-white font-semibold text-sm rounded-xl transition-all duration-200 shadow-lg shadow-accent/20"
@@ -152,19 +219,6 @@ export default async function ProjectPage({ params }: Props) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </ContactCTAButton>
-                {project.demo && (
-                  <a
-                    href={project.demo.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 border border-border hover:border-accent text-muted hover:text-accent text-sm font-medium rounded-xl transition-all duration-200"
-                  >
-                    Launch Demo
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                )}
               </div>
             </div>
 
@@ -176,63 +230,13 @@ export default async function ProjectPage({ params }: Props) {
             {/* Left: content (2/3) */}
             <div className="lg:col-span-2 space-y-10">
 
-              {/* Problem → Solution → Result */}
+              {/* Story */}
               <div>
                 <h2 className="font-display font-bold text-xl text-text mb-5">The Story</h2>
-                <div className="space-y-4">
-                  {/* Problem */}
-                  <div className="flex gap-4 p-5 bg-surface border border-border rounded-2xl">
-                    <div className="w-8 h-8 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center shrink-0 mt-0.5">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-red-500 uppercase tracking-wider mb-1.5">The Problem</p>
-                      <p className="text-text/80 text-sm leading-relaxed">{project.problem}</p>
-                    </div>
-                  </div>
-
-                  {/* Arrow connector */}
-                  <div className="flex justify-center">
-                    <svg className="w-5 h-5 text-muted/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-
-                  {/* Solution */}
-                  <div className="flex gap-4 p-5 bg-surface border border-border rounded-2xl">
-                    <div className="w-8 h-8 rounded-xl bg-accent/10 text-accent flex items-center justify-center shrink-0 mt-0.5">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-accent uppercase tracking-wider mb-1.5">The Solution</p>
-                      <p className="text-text/80 text-sm leading-relaxed">{project.solution}</p>
-                    </div>
-                  </div>
-
-                  {/* Arrow connector */}
-                  <div className="flex justify-center">
-                    <svg className="w-5 h-5 text-muted/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-
-                  {/* Result */}
-                  <div className="flex gap-4 p-5 rounded-2xl border" style={{ borderColor: `${color}30`, backgroundColor: `${color}08` }}>
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: `${color}20`, color }}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color }}>The Result</p>
-                      <p className="text-text/80 text-sm leading-relaxed">{project.result}</p>
-                    </div>
-                  </div>
-                </div>
+                <div
+                  className="article-content text-muted leading-relaxed text-base sm:text-lg"
+                  dangerouslySetInnerHTML={{ __html: project.story }}
+                />
               </div>
 
               {/* Key Features */}
@@ -270,39 +274,6 @@ export default async function ProjectPage({ params }: Props) {
 
             {/* Right: sidebar (1/3) */}
             <div className="space-y-5">
-
-              {/* Demo card */}
-              {project.demo && (
-                <div className="bg-accent/5 border border-accent/20 rounded-2xl p-6">
-                  <h3 className="font-display font-bold text-text text-base mb-2">Try the Live Demo</h3>
-                  <p className="text-muted text-xs mb-4 leading-relaxed">Use these credentials to explore the full system.</p>
-                  <div className="space-y-2.5 mb-5">
-                    <div className="bg-bg border border-border rounded-lg px-3 py-2.5 flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-0.5">Email</p>
-                        <p className="text-text text-xs font-mono">{project.demo.email}</p>
-                      </div>
-                    </div>
-                    <div className="bg-bg border border-border rounded-lg px-3 py-2.5 flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-0.5">Password</p>
-                        <p className="text-text text-xs font-mono">{project.demo.password}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <a
-                    href={project.demo.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-xl transition-all duration-200"
-                  >
-                    Launch Demo
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                </div>
-              )}
 
               {/* Tech stack */}
               <div className="bg-surface border border-border rounded-2xl p-6 sticky top-24">

@@ -2,10 +2,18 @@ import Link from "next/link";
 import { adminFetch } from "@/lib/admin-auth";
 import type { BlogPost } from "@/lib/api";
 import { deleteBlogPost } from "@/lib/actions/blogs";
+import { paginate } from "@/lib/pagination";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminBlogsPage() {
-  const res = await adminFetch("/api/blogposts");
-  const posts: BlogPost[] = res.ok ? await res.json() : [];
+interface Props {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function AdminBlogsPage({ searchParams }: Props) {
+  const { page } = await searchParams;
+  const res = await adminFetch("/api/blogposts?includeDrafts=true");
+  const allPosts: BlogPost[] = res.ok ? await res.json() : [];
+  const { pageItems: posts, currentPage, totalPages } = paginate(allPosts, Number(page));
 
   return (
     <div>
@@ -28,6 +36,7 @@ export default async function AdminBlogsPage() {
             <thead>
               <tr className="border-b border-border text-left text-muted uppercase text-xs tracking-wider">
                 <th className="px-5 py-3">Title</th>
+                <th className="px-5 py-3">Status</th>
                 <th className="px-5 py-3">Category</th>
                 <th className="px-5 py-3">Date</th>
                 <th className="px-5 py-3"></th>
@@ -36,7 +45,18 @@ export default async function AdminBlogsPage() {
             <tbody>
               {posts.map((post) => (
                 <tr key={post.id} className="border-b border-border last:border-0">
-                  <td className="px-5 py-3 text-text font-medium">{post.title}</td>
+                  <td className="px-5 py-3 text-text font-medium">{post.title || <span className="text-muted italic">Untitled</span>}</td>
+                  <td className="px-5 py-3">
+                    <span
+                      className={
+                        post.status === "published"
+                          ? "px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-600"
+                          : "px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-600"
+                      }
+                    >
+                      {post.status === "published" ? "Published" : "Draft"}
+                    </span>
+                  </td>
                   <td className="px-5 py-3 text-muted">{post.category}</td>
                   <td className="px-5 py-3 text-muted">{post.date}</td>
                   <td className="px-5 py-3 text-right whitespace-nowrap">
@@ -58,6 +78,7 @@ export default async function AdminBlogsPage() {
           </table>
           </div>
         )}
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   );

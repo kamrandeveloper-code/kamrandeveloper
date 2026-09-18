@@ -23,6 +23,13 @@ async function buildPayload(formData: FormData) {
     quickSummary: String(formData.get("quickSummary") ?? "").trim() || null,
     faqs: formDataToFaqs(formData),
     sortOrder: Number(formData.get("sortOrder") ?? 0),
+    metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
+    metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
+    ogTitle: String(formData.get("ogTitle") ?? "").trim() || null,
+    ogDescription: String(formData.get("ogDescription") ?? "").trim() || null,
+    twitterTitle: String(formData.get("twitterTitle") ?? "").trim() || null,
+    twitterDescription: String(formData.get("twitterDescription") ?? "").trim() || null,
+    status: formData.get("status") === "published" ? "published" : "draft",
   };
 }
 

@@ -2,10 +2,18 @@ import Link from "next/link";
 import { adminFetch } from "@/lib/admin-auth";
 import type { Testimonial } from "@/lib/api";
 import { deleteTestimonial } from "@/lib/actions/testimonials";
+import { paginate } from "@/lib/pagination";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminTestimonialsPage() {
+interface Props {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function AdminTestimonialsPage({ searchParams }: Props) {
+  const { page } = await searchParams;
   const res = await adminFetch("/api/testimonials");
-  const testimonials: Testimonial[] = res.ok ? await res.json() : [];
+  const allTestimonials: Testimonial[] = res.ok ? await res.json() : [];
+  const { pageItems: testimonials, currentPage, totalPages } = paginate(allTestimonials, Number(page));
 
   return (
     <div>
@@ -58,6 +66,7 @@ export default async function AdminTestimonialsPage() {
           </table>
           </div>
         )}
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   );

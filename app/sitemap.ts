@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { BASE_URL } from "@/lib/seo";
-import { getBlogPosts, getServices, getCaseStudies, getProjects } from "@/lib/api";
+import { getBlogPosts, getServices, getCaseStudies, getProjects, getIndustries } from "@/lib/api";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [blogPosts, services, caseStudies, projects] = await Promise.all([
+  const [blogPosts, services, caseStudies, projects, industries] = await Promise.all([
     getBlogPosts(),
     getServices(),
     getCaseStudies(),
     getProjects(),
+    getIndustries(),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -48,5 +49,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...projectRoutes, ...serviceRoutes, ...caseStudyRoutes, ...blogRoutes];
+  const industryRoutes: MetadataRoute.Sitemap = industries.map((i) => ({
+    url: `${BASE_URL}/industry/${i.slug}`,
+    lastModified: new Date(i.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...projectRoutes, ...serviceRoutes, ...caseStudyRoutes, ...blogRoutes, ...industryRoutes];
 }

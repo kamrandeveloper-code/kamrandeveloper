@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { developer } from "@/data/developer";
 import Image from "next/image";
+import NewsletterForm from "./NewsletterForm";
 
 const serviceLinks = [
   { label: "Custom Business Software", href: "/services/custom-business-software" },
@@ -155,9 +156,15 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* ── Column 3: Connect + Tech Stack ── */}
+          {/* ── Column 3: Newsletter + Follow us on + Tech Stack ── */}
           <div>
-            <h4 className="font-semibold text-text text-xs mb-4 uppercase tracking-widest">Connect</h4>
+            <h4 className="font-semibold text-text text-xs mb-3 uppercase tracking-widest">Newsletter</h4>
+            <p className="text-muted text-sm mb-3">Get notified when I publish something new.</p>
+            <div className="mb-8">
+              <NewsletterForm />
+            </div>
+
+            <h4 className="font-semibold text-text text-xs mb-4 uppercase tracking-widest">Follow us on</h4>
             <div className="flex flex-col gap-3 mb-8">
               <a
                 href="https://share.google/ZrE7OwSKI2ojYSO0A"

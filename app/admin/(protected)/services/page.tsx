@@ -2,10 +2,18 @@ import Link from "next/link";
 import { adminFetch } from "@/lib/admin-auth";
 import type { Service } from "@/lib/api";
 import { deleteService } from "@/lib/actions/services";
+import { paginate } from "@/lib/pagination";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminServicesPage() {
+interface Props {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function AdminServicesPage({ searchParams }: Props) {
+  const { page } = await searchParams;
   const res = await adminFetch("/api/services");
-  const services: Service[] = res.ok ? await res.json() : [];
+  const allServices: Service[] = res.ok ? await res.json() : [];
+  const { pageItems: services, currentPage, totalPages } = paginate(allServices, Number(page));
 
   return (
     <div>
@@ -58,6 +66,7 @@ export default async function AdminServicesPage() {
           </table>
           </div>
         )}
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   );

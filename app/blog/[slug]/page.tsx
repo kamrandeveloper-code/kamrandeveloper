@@ -31,14 +31,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPost(slug);
   if (post) {
+    const metaTitle = post.metaTitle || post.title;
+    const metaDescription = post.metaDescription || post.excerpt;
+    const ogTitle = post.ogTitle || metaTitle;
+    const ogDescription = post.ogDescription || metaDescription;
+    const twitterTitle = post.twitterTitle || ogTitle;
+    const twitterDescription = post.twitterDescription || ogDescription;
+
     return baseMetadata({
-      title: post.title,
-      description: post.excerpt,
+      title: metaTitle,
+      description: metaDescription,
       alternates: { canonical: `${BASE_URL}/blog/${slug}` },
       openGraph: {
-        title: post.title,
-        description: post.excerpt,
+        title: ogTitle,
+        description: ogDescription,
         url: `${BASE_URL}/blog/${slug}`,
+      },
+      twitter: {
+        title: twitterTitle,
+        description: twitterDescription,
       },
     });
   }

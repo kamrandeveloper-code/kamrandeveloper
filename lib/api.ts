@@ -19,6 +19,13 @@ export interface BlogPost {
   quickSummary?: string | null;
   faqs: FaqItem[];
   sortOrder: number;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
+  twitterTitle?: string | null;
+  twitterDescription?: string | null;
+  status: "draft" | "published";
   createdAt: string;
   updatedAt: string;
 }
@@ -46,6 +53,22 @@ export interface Service {
   idealFor: string[];
   engagement: EngagementInfo;
   technologies: string[];
+  quickSummary?: string | null;
+  faqs: FaqItem[];
+  featured: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Industry {
+  id: number;
+  slug: string;
+  title: string;
+  tagline: string;
+  description: string;
+  longDescription: string;
+  heroImage: string;
   quickSummary?: string | null;
   faqs: FaqItem[];
   featured: boolean;
@@ -92,19 +115,24 @@ export interface Project {
   description: string;
   longDescription: string;
   industry: string;
-  problem: string;
-  solution: string;
-  result: string;
+  story: string;
   features: string[];
   architecture?: string | null;
   tech: string[];
   category: string;
   image: string;
+  bannerImage: string;
   featured: boolean;
   blogPost: string;
   demo?: DemoInfo | null;
   quickSummary?: string | null;
   faqs: FaqItem[];
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
+  twitterTitle?: string | null;
+  twitterDescription?: string | null;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -184,4 +212,12 @@ export async function getProject(slug: string): Promise<Project | null> {
 
 export async function getFaqs(): Promise<SiteFaq[]> {
   return (await apiFetch<SiteFaq[]>("/api/sitefaqs")) ?? [];
+}
+
+export async function getIndustries(): Promise<Industry[]> {
+  return (await apiFetch<Industry[]>("/api/industries")) ?? [];
+}
+
+export async function getIndustry(slug: string): Promise<Industry | null> {
+  return apiFetch<Industry>(`/api/industries/slug/${encodeURIComponent(slug)}`);
 }
