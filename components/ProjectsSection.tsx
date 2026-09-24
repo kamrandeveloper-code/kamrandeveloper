@@ -70,8 +70,8 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
   }
 
   return (
-    <section className="py-24 bg-surface">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-14 ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
 
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-14">
           <div>
@@ -92,7 +92,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
-          className="flex gap-6 overflow-x-auto select-none cursor-grab pb-2"
+          className="flex gap-6 overflow-x-auto select-none cursor-grab pb-2 "
           style={{
             scrollbarWidth: "none",
             WebkitOverflowScrolling: "touch",
@@ -111,7 +111,7 @@ export default function ProjectsSection({ projects }: { projects: Project[] }) {
         </div>
 
         {/* Dots + arrows */}
-        <div className="flex items-center justify-center gap-4 mt-8 mb-10">
+        <div className="flex items-center justify-center gap-4 mt-8 mb-10 ">
           <button
             onClick={() => scrollTo(activeIndex - 1)}
             disabled={activeIndex === 0}

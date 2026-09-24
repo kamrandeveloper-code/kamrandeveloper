@@ -47,7 +47,7 @@ export function ServiceCard({ service }: { service: Service }) {
       <div className="w-8 h-0.5 bg-accent/40 rounded-full mb-4 group-hover:w-14 group-hover:bg-accent transition-all duration-300" />
       <p className="text-muted text-sm leading-relaxed mb-4">{service.tagline}</p>
       <ul className="space-y-2 flex-1 mb-5">
-        {service.benefits.map((benefit) => (
+        {service.benefits.slice(0, 3).map((benefit) => (
           <li key={benefit} className="flex items-start gap-2 text-sm text-muted/80">
             <svg className="w-4 h-4 text-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -90,10 +90,23 @@ export function FeaturedServiceCard({ service }: { service: Service }) {
       <div className="relative w-8 h-0.5 bg-accent/60 rounded-full mb-4 group-hover:w-14 group-hover:bg-accent transition-all duration-300" />
       <p className="relative text-muted text-sm leading-relaxed mb-4">{service.tagline}</p>
       <ul className="relative space-y-2 flex-1 mb-5">
-        {service.benefits.map((benefit) => (
-          <li key={benefit} className="flex items-start gap-2 text-sm text-muted/80">
-            <svg className="w-4 h-4 text-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        {service.benefits.slice(0, 3).map((benefit) => (
+          <li
+            key={benefit}
+            className="flex items-start gap-2 text-sm text-muted/80"
+          >
+            <svg
+              className="w-4 h-4 text-accent shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
             </svg>
             {benefit}
           </li>
