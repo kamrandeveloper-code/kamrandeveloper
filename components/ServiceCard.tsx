@@ -57,7 +57,7 @@ export function ServiceCard({ service }: { service: Service }) {
         ))}
       </ul>
       <div className="flex flex-wrap gap-1.5 mb-4 pt-4 border-t border-border">
-        {service.technologies.map((tag) => (
+        {service.technologies.slice(0, 3).map((tag) => (
           <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-surface-2 border border-border text-muted/60">
             {tag}
           </span>
@@ -113,7 +113,7 @@ export function FeaturedServiceCard({ service }: { service: Service }) {
         ))}
       </ul>
       <div className="relative flex flex-wrap gap-1.5 mb-4 pt-4 border-t border-accent/20">
-        {service.technologies.map((tag) => (
+        {service.technologies.slice(0, 3).map((tag) => (
           <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-accent/8 border border-accent/20 text-accent/70 group-hover:border-accent/40 group-hover:text-accent transition-colors duration-200">
             {tag}
           </span>
