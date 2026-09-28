@@ -9,6 +9,10 @@ export interface ActionState {
   error?: string;
 }
 
+function optionalString(formData: FormData, key: string): string | null {
+  return String(formData.get(key) ?? "").trim() || null;
+}
+
 function buildPayload(formData: FormData) {
   return {
     slug: String(formData.get("slug") ?? ""),
@@ -23,6 +27,11 @@ function buildPayload(formData: FormData) {
       type: String(formData.get("engagementType") ?? ""),
       timeline: String(formData.get("engagementTimeline") ?? ""),
       note: String(formData.get("engagementNote") ?? ""),
+      ctaText: optionalString(formData, "engagementCtaText"),
+      ctaUrl: optionalString(formData, "engagementCtaUrl"),
+      secondaryCtaText: optionalString(formData, "engagementSecondaryCtaText"),
+      secondaryCtaUrl: optionalString(formData, "engagementSecondaryCtaUrl"),
+      customHtml: optionalString(formData, "engagementCustomHtml"),
     },
     technologies: formDataToList(formData, "technologies"),
     quickSummary: String(formData.get("quickSummary") ?? "").trim() || null,

@@ -56,7 +56,7 @@ export default async function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {services.map((service) =>
+          {services.slice(0, 6).map((service) =>
             service.featured ? (
               <FeaturedServiceCard key={service.slug} service={service} />
             ) : (
@@ -87,3 +87,10 @@ export default async function ServicesSection() {
     </section>
   );
 }
+
+
+
+
+
+
+

@@ -36,6 +36,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
+const isExternal = (url: string) => /^https?:\/\//.test(url);
+
+const primaryCtaClass =
+  "w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-xl transition-all duration-200";
+
+const arrowIcon = (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+  </svg>
+);
+
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const service = await getService(slug);
@@ -44,6 +55,10 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   const allServices = await getServices();
   const related = allServices.filter((s) => s.slug !== slug).slice(0, 3);
+  const ctaText = service.engagement.ctaText || "Get a free quote";
+  const ctaUrl = service.engagement.ctaUrl;
+  const secondaryCtaText = service.engagement.secondaryCtaText || "See past projects";
+  const secondaryCtaUrl = service.engagement.secondaryCtaUrl || "/projects";
   const icon = serviceIcons[service.slug];
 
   const breadcrumb = breadcrumbSchema([
@@ -186,10 +201,11 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
 
             {/* Right: sidebar (1/3) */}
-            <div className="space-y-5">
+            <div>
+            <div className="sticky top-24 space-y-5">
 
               {/* Engagement card */}
-              <div className="bg-surface border border-border rounded-2xl p-6 sticky top-24">
+              <div className="bg-surface border border-border rounded-2xl p-6">
                 <h3 className="font-display font-bold text-text text-base mb-5">Engagement</h3>
                 <div className="space-y-4 mb-5">
                   <div>
@@ -204,21 +220,36 @@ export default async function ServiceDetailPage({ params }: Props) {
                     {service.engagement.note}
                   </div>
                 </div>
-                <ContactCTAButton
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-accent hover:bg-[var(--color-accent-hover)] text-white text-sm font-semibold rounded-xl transition-all duration-200"
-                >
-                  Get a free quote
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </ContactCTAButton>
-                <Link
-                  href="/projects"
-                  className="mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-border hover:border-accent text-muted hover:text-accent text-sm font-medium rounded-xl transition-all duration-200"
-                >
-                  See past projects
-                </Link>
+                {ctaUrl ? (
+                  <Link
+                    href={ctaUrl}
+                    {...(isExternal(ctaUrl) && { target: "_blank", rel: "noopener noreferrer" })}
+                    className={primaryCtaClass}
+                  >
+                    {ctaText}
+                    {arrowIcon}
+                  </Link>
+                ) : (
+                  <ContactCTAButton className={primaryCtaClass}>
+                    {ctaText}
+                    {arrowIcon}
+                  </ContactCTAButton>
+                )}
+                {secondaryCtaUrl !== "none" && (
+                  <Link
+                    href={secondaryCtaUrl}
+                    {...(isExternal(secondaryCtaUrl) && { target: "_blank", rel: "noopener noreferrer" })}
+                    className="mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-border hover:border-accent text-muted hover:text-accent text-sm font-medium rounded-xl transition-all duration-200"
+                  >
+                    {secondaryCtaText}
+                  </Link>
+                )}
               </div>
+
+              {service.engagement.customHtml && (
+                <div className="space-y-5" dangerouslySetInnerHTML={{ __html: service.engagement.customHtml }} />
+              )}
+            </div>
             </div>
           </div>
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { developer } from "@/data/developer";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type Status = "idle" | "sending" | "sent";
 
 interface Props {
   onSuccess?: () => void;
@@ -10,13 +11,17 @@ interface Props {
 
 export default function EmailCompose({ onSuccess }: Props) {
   const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState<{ message: string; mailto: string } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
     if (!formRef.current) return;
     setStatus("sending");
+    setError(null);
     const data = new FormData(formRef.current);
+    const name = String(data.get("from_name") ?? "");
+    const message = String(data.get("message") ?? "");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -27,16 +32,26 @@ export default function EmailCompose({ onSuccess }: Props) {
           message: data.get("message"),
         }),
       });
-      if (!res.ok) throw new Error("Failed to send");
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.message);
+      }
       setStatus("sent");
       formRef.current.reset();
       setTimeout(() => {
         setStatus("idle");
         onSuccess?.();
       }, 2500);
-    } catch {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 3000);
+    } catch (err) {
+      // Keep what the visitor typed and offer a prefilled email so the message isn't lost.
+      const subject = encodeURIComponent(`Project inquiry from ${name}`);
+      setError({
+        message:
+          (err instanceof Error && err.message) ||
+          "Sorry, the message couldn't be sent right now. Please email me directly instead.",
+        mailto: `mailto:${developer.email}?subject=${subject}&body=${encodeURIComponent(message)}`,
+      });
+      setStatus("idle");
     }
   }
 
@@ -93,11 +108,19 @@ export default function EmailCompose({ onSuccess }: Props) {
         <p id="message-help" className="sr-only">Describe your project, challenges, and what you need help with.</p>
       </div>
 
+      {error && (
+        <div role="alert" className="text-sm rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2.5 text-text">
+          <p>{error.message}</p>
+          <a href={error.mailto} className="mt-1 inline-block font-semibold text-accent hover:underline">
+            Email {developer.email} →
+          </a>
+        </div>
+      )}
+
       {/* Status region for screen readers */}
       <div role="status" aria-live="polite" className="sr-only">
         {status === "sending" && "Sending your message..."}
         {status === "sent" && "Message sent successfully."}
-        {status === "error" && "Failed to send. Please try again."}
       </div>
 
       <button
@@ -114,7 +137,6 @@ export default function EmailCompose({ onSuccess }: Props) {
         {status === "idle" && "Send Message"}
         {status === "sending" && "Sending…"}
         {status === "sent" && "✓ Message sent!"}
-        {status === "error" && "Failed — try again"}
       </button>
     </form>
   );

@@ -138,6 +138,47 @@ export default function ServiceForm({ action, service }: Props) {
           required
           className="mt-3 w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
         />
+
+        <p className="mt-4 mb-1.5 text-xs text-muted">
+          Buttons <span className="font-normal">(optional — leave blank for the defaults. Primary with no URL opens the contact popup.)</span>
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input
+            name="engagementCtaText"
+            placeholder="Primary text (default: Get a free quote)"
+            defaultValue={service?.engagement.ctaText ?? ""}
+            className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+          />
+          <input
+            name="engagementCtaUrl"
+            placeholder="Primary URL (e.g. https://calendly.com/…)"
+            defaultValue={service?.engagement.ctaUrl ?? ""}
+            className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+          />
+          <input
+            name="engagementSecondaryCtaText"
+            placeholder="Secondary text (default: See past projects)"
+            defaultValue={service?.engagement.secondaryCtaText ?? ""}
+            className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+          />
+          <input
+            name="engagementSecondaryCtaUrl"
+            placeholder="Secondary URL (default: /projects, or 'none' to hide)"
+            defaultValue={service?.engagement.secondaryCtaUrl ?? ""}
+            className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm focus:outline-none focus:border-accent"
+          />
+        </div>
+
+        <label className="block mt-4 mb-1.5 text-xs text-muted">
+          Custom cards HTML <span className="font-normal">(optional — rendered in the sidebar under the Engagement card)</span>
+        </label>
+        <textarea
+          name="engagementCustomHtml"
+          defaultValue={service?.engagement.customHtml ?? ""}
+          rows={6}
+          placeholder={'<div class="bg-surface border border-border rounded-2xl p-6">\n  <h3 class="font-display font-bold text-text">Starter package</h3>\n  <p class="text-sm text-muted">From $1,500</p>\n</div>'}
+          className="w-full px-3 py-2.5 bg-surface border border-border rounded-lg text-text text-sm font-mono focus:outline-none focus:border-accent"
+        />
       </div>
 
       <ListInput

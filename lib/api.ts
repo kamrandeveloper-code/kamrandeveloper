@@ -39,6 +39,11 @@ export interface EngagementInfo {
   type: string;
   timeline: string;
   note: string;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+  secondaryCtaText?: string | null;
+  secondaryCtaUrl?: string | null;
+  customHtml?: string | null;
 }
 
 export interface Service {
